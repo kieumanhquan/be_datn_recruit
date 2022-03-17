@@ -1,8 +1,10 @@
 package com.itsol.recruit.entity;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
@@ -10,19 +12,20 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GEN_ROLE_ID")
     @SequenceGenerator(name = "GEN_ROLE_ID", sequenceName = "SEQ_ROLE", allocationSize = 1)
     @Column(name = "id", nullable = false)
-    private Long id;
+    Long id;
 
     @Column(name = "role_code", nullable = false)
-    private String roleCode;
+    String roleCode;
 
     @Column(name = "name")
-    private String name;
+    String name;
 
     @Column(name = "description")
-    private String description;
+    String description;
 }

@@ -6,6 +6,7 @@ import com.itsol.recruit.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 
 @Service
@@ -19,7 +20,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getAllUser() {
-        return userRepository.getAllUser();
+    public List<User> getAllUser() {
+        return userRepository.findAll();
     }
+
+    @Override
+    public User findById(Long id) {
+        return userRepository.findById(id).get();
+    }
+
+    @Override
+    public User findUserByUserName(String userName) {
+        return userRepository.findUserByUserName(userName);
+    }
+
+
 }

@@ -23,9 +23,6 @@ public class Role {
     @Column(name = "role_code", nullable = false)
     String roleCode;
 
-    @Column(name = "name")
-    String name;
-
     @Column(name = "description")
     String description;
 }

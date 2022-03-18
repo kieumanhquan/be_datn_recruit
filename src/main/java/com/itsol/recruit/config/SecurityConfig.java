@@ -21,7 +21,6 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -29,10 +28,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     TokenProvider tokenProvider;
 
-//    public SecurityConfig(CorsFilter corsFilter, TokenProvider tokenProvider) {
-//        this.corsFilter = corsFilter;
-//        this.tokenProvider = tokenProvider;
-//    }
+    public SecurityConfig(CorsFilter corsFilter, TokenProvider tokenProvider) {
+        this.corsFilter = corsFilter;
+        this.tokenProvider = tokenProvider;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -48,14 +47,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/swagger-resources/**", "/v2/api-docs","/v3/api-docs").permitAll()
+                .antMatchers("/swagger-resources/**", "/v2/api-docs").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
 //                .antMatchers("/api/authenticate").permitAll()
-                .antMatchers(Constants.Api.Path.AUTH+ "/**").permitAll()
+//                .antMatchers(Constants.Api.Path.AUTH+ "/**").permitAll()
                 .antMatchers("/api/logout").permitAll()
                 .antMatchers("/api/register").permitAll()
-//      .antMatchers("/mate-api/user/**").hasAnyRole(AuthoritiesConstants.ROLE_USER)
-                .antMatchers("/api/**").authenticated()
+                .antMatchers("/api/admin/**").hasAnyRole(Constants.Role.ADMIN)
+                .antMatchers("/api/je/**").hasAnyRole(Constants.Role.JE, Constants.Role.ADMIN)
+                .antMatchers("/api/user/**").hasAnyRole(Constants.Role.JE, Constants.Role.ADMIN,Constants.Role.USER)
+                .antMatchers("/api/public/**").permitAll()
+                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/**").permitAll()
                 .and()
                 .httpBasic()
                 .and()

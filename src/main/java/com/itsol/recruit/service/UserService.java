@@ -1,9 +1,14 @@
 package com.itsol.recruit.service;
 
 import com.itsol.recruit.entity.User;
-import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 public interface UserService {
 
-    public User getAllUser();
+    public List<User> getAllUser();
+
+    public User findById(Long id);
+
+    public User findUserByUserName(String userName);
 }

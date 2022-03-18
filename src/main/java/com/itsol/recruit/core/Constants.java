@@ -1,9 +1,5 @@
 package com.itsol.recruit.core;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 /**
  * Application constants.
  */
@@ -17,6 +13,12 @@ public final class Constants {
         public static final String JE = "je";
         public static final String USER = "user";
     }
+
+    public static final class Status{
+        public static final String PENDING = "pending";
+        public static final String APPROVED = "approved";
+    }
+
 
     // Regex for acceptable logins
     public static final String LOGIN_REGEX = "^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$";
@@ -68,6 +70,41 @@ public final class Constants {
                 public static final String AUTH = ADMIN + "/auth";
             }
         }
+    }
+    public static class ValidationMessage {
+        public static final String FIELD_IS_REQUIRED = "validation.mustNotBeNull";
+
+        public static final String INVALID_PHONE_NUMBER = "validation.invalidPhoneNumber";
+        public static final String INVALID_OTP = "validation.invalidOTP";
+        public static final String INVALID_PASSWORD = "validation.invalidPassword";
+        public static final String INVALID_USER_NAME = "validation.invalidUserName";
+        public static final String INVALID_FIRST_NAME = "validation.invalidFirstName";
+        public static final String INVALID_LAST_NAME = "validation.invalidLastName";
+        public static final String INVALID_COUNTRY_CODE = "validation.invalidCountryCode";
+        public static final String EXPIRED_OTP = "validation.expiredOTP";
+        public static final String INVALID_DATE = "validation.invalidDate";
+        public static final String UNVERIFIED_PHONE_NUMBER = "validation.unverifiedPhoneNumber";
+
+        public static final String NOT_FOUND_RECEIVER = "validation.notFoundReceiver";
+        public static final String NOT_FOUND_USER = "validation.notFoundUser";
+        public static final String NOT_ACTIVATED_USER = "validation.notActivatedUser";
+        public static final String NOT_FOUND_PET = "validation.notFoundPet";
+        public static final String NOT_FOUND_NOTIFICATION = "validation.notFoundNotification";
+        public static final String NOT_FOUND_TRACKER = "validation.notFoundTracker";
+        public static final String CURRENT_PASSWORD_INVALID = "validation.invalidCurrentPassword";
+        public static final String NOT_FOUND_BREED = "validation.notFoundBreed";
+        public static final String NOT_FOUND_SAFE_ZONE = "validation.notFoundSafeZone";
+
+        public static final String EXISTS_USER = "validation.existsUser";
+        public static final String NOT_EXISTS_IMEI = "validation.notExistingImei";
+        public static final String TOO_MANY_TIMES_GET_OTP = "validation.tooManyTimesGetOTP";
+        public static final String TOO_SHORT_DURATION_BETWEEN_OTP_REQUESTS = "validation.tooShortDurationBetweenOtpRequests";
+
+        public static final String INVALID_MIN_VALUE = "validation.invalidMinValue";
+        public static final String INVALID_MAX_VALUE = "validation.invalidMaxValue";
+        public static final String INVALID_SIZE_VALUE = "validation.invalidSizeValue";
+        public static final String NOT_CONTAIN_WHITE_SPACE = "validation.notContainWhiteSpace";
+
     }
 
 }

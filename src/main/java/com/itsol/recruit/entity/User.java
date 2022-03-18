@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Type;
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User implements Serializable {
+public class User{
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USERS_SEQ")
@@ -45,13 +44,17 @@ public class User implements Serializable {
 
     @Column(name = "gender")
     String gender;
+
     @Column(name = "new_password")
     String newPassword;
 
     @Column(name = "birth_day")
     Date birthDay;
+
     @Column(name = "is_delete")
-    int isDelete;
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    boolean isDelete;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 

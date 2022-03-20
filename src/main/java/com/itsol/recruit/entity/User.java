@@ -61,4 +61,6 @@ public class User{
     @Column(name = "is_active")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean isActive;
+
+
 }

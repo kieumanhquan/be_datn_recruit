@@ -64,8 +64,7 @@ public class AuthenticateController {
 
         User userLogin = userService.findUserByUserName(adminLoginVM.getUserName());
         String jwt = tokenProvider.createToken(authenticationString, true);
-        String userName = userLogin.getUserName();
-        return ResponseEntity.ok().body(new JWTTokenResponse(jwt, userName)); //Trả về chuỗi jwt(authentication string)
+        return ResponseEntity.ok().body(new JWTTokenResponse(jwt)); //Trả về chuỗi jwt(authentication string)
     }
 
 }

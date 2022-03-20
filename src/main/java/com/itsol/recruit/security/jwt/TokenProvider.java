@@ -50,7 +50,7 @@ public class TokenProvider  implements InitializingBean  {
         Date expiredTime = new Date((rememberMe ? tokenValidityInSecondsForRememberMe : tokenValidityInMilliseconds) + now);
 
         return Jwts.builder().setSubject(authentication.getName()).claim(AUTHORITIES_KEY, authorities)
-                .signWith(this.key, SignatureAlgorithm.HS512).setExpiration(expiredTime).compact();
+                .signWith(this.key, SignatureAlgorithm.HS256).setExpiration(expiredTime).compact();
     }
 
     public Authentication getAuthentication(String token) {

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -20,9 +21,13 @@ public class Role {
     @Column(name = "id", nullable = false)
     Long id;
 
-    @Column(name = "role_code", nullable = false)
-    String roleCode;
+    @Column(name = "code", nullable = false)
+    String code;
 
     @Column(name = "description")
     String description;
+
+    @Column(name = "is_delete")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    boolean isDelete;
 }

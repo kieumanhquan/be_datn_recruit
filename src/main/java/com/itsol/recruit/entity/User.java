@@ -21,8 +21,8 @@ public class User{
     @SequenceGenerator(name = "USERS_SEQ", sequenceName = "USERS_SEQ", allocationSize = 1, initialValue = 1)
     Long id;
 
-    @Column(name = "full_name")
-    String fullName;
+    @Column(name = "name")
+    String name;
 
     @Column(name = "email")
     String email;
@@ -45,9 +45,6 @@ public class User{
     @Column(name = "gender")
     String gender;
 
-    @Column(name = "new_password")
-    String newPassword;
-
     @Column(name = "birth_day")
     Date birthDay;
 
@@ -56,11 +53,15 @@ public class User{
     boolean isDelete;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "permisstion",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ROLE_ID")
+    )
     private Set<Role> roles = new HashSet<>();
 
-    @Column(name = "is_active")
+    @Column(name = "activate")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean isActive;
-
 
 }

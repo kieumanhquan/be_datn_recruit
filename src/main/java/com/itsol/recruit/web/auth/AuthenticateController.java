@@ -3,6 +3,7 @@ package com.itsol.recruit.web.auth;
 import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.dto.UserDTO;
 import com.itsol.recruit.entity.User;
+import com.itsol.recruit.security.jwt.JWTFilter;
 import com.itsol.recruit.security.jwt.JWTTokenResponse;
 import com.itsol.recruit.security.jwt.TokenProvider;
 import com.itsol.recruit.service.AuthenticateService;
@@ -10,6 +11,8 @@ import com.itsol.recruit.service.UserService;
 import com.itsol.recruit.web.vm.AdminLoginVM;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Collections;
 
 @RestController
 @RequestMapping(value = Constants.Api.Path.AUTH)
@@ -61,10 +65,10 @@ public class AuthenticateController {
         );
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationString);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        User userLogin = userService.findUserByUserName(adminLoginVM.getUserName());
-        String jwt = tokenProvider.createToken(authenticationString, true);
-        return ResponseEntity.ok().body(new JWTTokenResponse(jwt)); //Trả về chuỗi jwt(authentication string)
+        String jwt = tokenProvider.createToken(authentication, true);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, String.format("Bearer %s", jwt));
+        return new ResponseEntity<>(Collections.singletonMap("token", jwt), httpHeaders, HttpStatus.OK); //Trả về chuỗi jwt(authentication string)
     }
 
 }

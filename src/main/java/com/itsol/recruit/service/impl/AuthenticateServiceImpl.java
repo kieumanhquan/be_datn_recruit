@@ -38,7 +38,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
     @Override
     public User signup(UserDTO dto) {
         try{
-            Set<Role> roles = roleRepository.findByRoleCode(Constants.Role.USER);
+            Set<Role> roles = roleRepository.findByCode(Constants.Role.USER);
             User user = userMapper.toEntity(dto);
             user.setDelete(false);
             user.setActive(false);

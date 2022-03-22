@@ -9,9 +9,9 @@ public final class Constants {
     }
 
     public static final class Role{
-        public static final String ADMIN = "admin";
-        public static final String JE = "je";
-        public static final String USER = "user";
+        public static final String ADMIN = "ROLE_ADMIN";
+        public static final String JE = "ROLE_JE";
+        public static final String USER = "ROLE_USER";
     }
 
     public static final class Status{

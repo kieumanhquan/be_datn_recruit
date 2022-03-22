@@ -11,15 +11,15 @@ spring:
 
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@localhost:1521:qlsvitsol
-    username: recruit
-    password: 123456
+    url: jdbc:oracle:thin:@localhost:1521:ORCL
+    username: TUANKIET
+    password: phamtuankiet
 
 
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     database-platform: org.hibernate.dialect.OracleDialect
 
 application:

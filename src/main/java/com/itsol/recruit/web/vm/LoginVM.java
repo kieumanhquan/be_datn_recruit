@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-public class AdminLoginVM {
+public class LoginVM {
 //    @Schema(description = "User name of the User.", example = Constants.Api.FieldExample.USER_NAME, required = true)
 //    @NotNull(message = Constants.ValidationMessage.FIELD_IS_REQUIRED)
 //    @Pattern(regexp = "^[\\w\\d]{5,20}$", message = Constants.ValidationMessage.INVALID_USER_NAME)
@@ -21,4 +21,6 @@ public class AdminLoginVM {
 //    @Size(min = 6, max = 32, message = Constants.ValidationMessage.INVALID_SIZE_VALUE)
 //    @Pattern(regexp = "^[\\w\\d$&+,:;=?@#|'<>.^*()%!-]*", message = Constants.ValidationMessage.INVALID_PASSWORD)
     private String password;
+
+    private Boolean rememberMe;
 }

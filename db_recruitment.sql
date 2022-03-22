@@ -86,7 +86,7 @@ CREATE TABLE roles(
                      PRIMARY KEY(id)
 );
 
-CREATE TABLE Permisstion(
+CREATE TABLE permisstion(
                             user_id NUMBER(4) NOT NULL,
                             role_id NUMBER(4) NOT NULL,
                             PRIMARY KEY(user_id, role_id),

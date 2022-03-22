@@ -2,17 +2,13 @@ server:
   port: 9090
 
 spring:
-#  application:
-#    name: demo-service
-#
-#  data:
-#    rest:
-#      base-path: 'api'
-
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
+#    url: jdbc:oracle:thin:@localhost:1521:ORCL
+#    username: TUANKIET
+#    password: phamtuankiet
     url: jdbc:oracle:thin:@localhost:1521:qlsvitsol
-    username: recruit
+    username: Recruit
     password: 123456
 
 

@@ -98,13 +98,14 @@ CREATE TABLE permisstion(
 CREATE TABLE job(
                     id NUMBER(4) PRIMARY KEY,
                     name VARCHAR(100) NOT NULL,
-                    job_position VARCHAR(100) NOT NULL,
+                    job_position_id NUMBER(4) NOT NULL,
                     number_experience VARCHAR(100) NOT NULL,
                     working_form_id  NUMBER(4) NOT NULL,
                     address_work VARCHAR(100) NOT NULL,
                     academic_level_id NUMBER(4) NOT NULL,
                     rank_id NUMBER(4) NOT NULL,
                     qty_person INTEGER NOT NULL,
+                    start_recruitment_date DATE NOT NULL,
                     due_date DATE NOT NULL,
                     skills VARCHAR(100) NOT NULL,
                     description VARCHAR(100) NOT NULL,
@@ -114,7 +115,7 @@ CREATE TABLE job(
                     salary_min INTEGER NOT NULL,
                     contact_id NUMBER(4) NOT NULL,
                     create_id  NUMBER(4) NOT NULL,
-                    creater_date DATE NOT NULL,
+                    create_date DATE NOT NULL,
                     update_id  NUMBER(4) NOT NULL,
                     update_date DATE NOT NULL,
                     status_id NUMBER(4) NOT NULL,
@@ -152,6 +153,13 @@ CREATE TABLE jobs_register(
 
 
 Create table type(
+                     id NUMBER(4) primary key,
+                     code nvarchar2(50),
+                     description nvarchar2(50),
+                     is_delete INTEGER NOT NULL
+);
+
+Create table job_position(
                      id NUMBER(4) primary key,
                      code nvarchar2(50),
                      description nvarchar2(50),

@@ -62,8 +62,8 @@ public class Job {
     @Column(name = "description")
     String description;
 
-    @Column(name = "interrest")
-    String interrest;
+    @Column(name = "benefits")
+    String benefits;
 
     @Column(name = "job_requirement")
     String jobRequirement;

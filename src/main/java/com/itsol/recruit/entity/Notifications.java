@@ -38,7 +38,7 @@ public class Notifications {
     private String content;
 
     @Column(name = "res_id")
-    private Long res;
+    private Long res;// id của job hoặc job register
 
     @ManyToOne
     @JoinColumn(name= "type_id")

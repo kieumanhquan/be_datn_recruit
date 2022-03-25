@@ -7,15 +7,15 @@ spring:
 #    url: jdbc:oracle:thin:@localhost:1521:ORCL
 #    username: TUANKIET
 #    password: phamtuankiet
-    url: jdbc:oracle:thin:@localhost:1521:qlsvitsol
-    username: Recruit
-    password: 123456
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: team2
+    password: wibu123456
 
 
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
     database-platform: org.hibernate.dialect.OracleDialect
 
 application:

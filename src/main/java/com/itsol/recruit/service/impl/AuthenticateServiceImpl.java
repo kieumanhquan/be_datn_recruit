@@ -43,7 +43,6 @@ public class AuthenticateServiceImpl implements AuthenticateService {
             user.setDelete(false);
             user.setActive(false);
             user.setActive(false);
-            user.setDelete(false);
             user.setRoles(roles);
 //
             userRepository.save(user);

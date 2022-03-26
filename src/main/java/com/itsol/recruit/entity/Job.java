@@ -80,7 +80,7 @@ public class Job {
 
     @ManyToOne
     @JoinColumn(name = "create_id")
-    User creater;
+    User creator;
 
     @Column(name = "create_date")
     Date createDate ;

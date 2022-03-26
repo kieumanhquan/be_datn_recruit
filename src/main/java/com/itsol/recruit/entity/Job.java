@@ -51,7 +51,7 @@ public class Job {
     Integer qtyPerson;
 
     @Column(name = "start_recruitment_date")
-    Date startRecruitmentDate ;
+    Date startRecruitmentDate;
 
     @Column(name = "due_date")
     Date dueDate;

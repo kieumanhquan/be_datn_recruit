@@ -76,7 +76,6 @@ public final class Constants {
     }
     public static class ValidationMessage {
         public static final String FIELD_IS_REQUIRED = "validation.mustNotBeNull";
-
         public static final String INVALID_PHONE_NUMBER = "validation.invalidPhoneNumber";
         public static final String INVALID_OTP = "validation.invalidOTP";
         public static final String INVALID_PASSWORD = "validation.invalidPassword";

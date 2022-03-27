@@ -2,6 +2,7 @@ package com.itsol.recruit.web.auth;
 
 import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.dto.UserDTO;
+import com.itsol.recruit.entity.OTP;
 import com.itsol.recruit.entity.User;
 import com.itsol.recruit.security.jwt.JWTFilter;
 import com.itsol.recruit.security.jwt.TokenProvider;
@@ -47,6 +48,14 @@ public class AuthenticateController {
         return ResponseEntity.ok().body(authenticateService.signup(dto));
     }
 
+    @PostMapping("/changePassword")
+    public ResponseEntity<User> doChangePassword(@Valid @RequestBody UserDTO dto, @RequestBody OTP otp) {
+        return ResponseEntity.ok().body(authenticateService.changePassword(dto,otp));
+    }
+ /*   @GetMapping("/changePassword")
+    public ResponseEntity<User> changePassword(@Valid @RequestBody UserDTO dto) {
+        return ResponseEntity.ok().body(authenticateService.changePassword(dto));
+    }*/
     /*
     Login api
      */
@@ -58,6 +67,7 @@ public class AuthenticateController {
                 loginVM.getUserName(),
                 loginVM.getPassword()
         );
+        System.out.println("login success");
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationString);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createToken(authentication, loginVM.getRememberMe());

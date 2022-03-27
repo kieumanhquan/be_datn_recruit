@@ -2,6 +2,7 @@ package com.itsol.recruit.service.impl;
 
 import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.dto.UserDTO;
+import com.itsol.recruit.entity.OTP;
 import com.itsol.recruit.entity.Role;
 import com.itsol.recruit.entity.User;
 import com.itsol.recruit.repository.AuthenticateRepository;
@@ -40,23 +41,29 @@ public class AuthenticateServiceImpl implements AuthenticateService {
         try{
             Set<Role> roles = roleRepository.findByCode(Constants.Role.USER);
             User user = userMapper.toEntity(dto);
-            user.setDelete(false);
-            user.setActive(false);
             user.setActive(false);
             user.setDelete(false);
             user.setRoles(roles);
-//
             userRepository.save(user);
 //        OTP otp = userService.generateOTP(user);
 //        String linkActive = accountActivationConfig.getActivateUrl() + user.getId();
 //        emailService.sendSimpleMessage(user.getEmail(),
 //                "Link active account",
-//                "<a href=\" " + linkActive + "\">Click vào đây để kích hoạt tài khoản</a>");
+//                "<a href=\" " + linkActive + "\">Click vào đây để kích hoạt tài khoản</a>");*/
             return user;
         }catch (Exception e){
             log.error("cannot save to database");
             return  null;
         }
 
+    }
+
+    @Override
+    public User changePassword(UserDTO dto, OTP otp) {
+        return null;
+    }
+    @Override
+    public User sendOtp(User user) {
+        return null;
     }
 }

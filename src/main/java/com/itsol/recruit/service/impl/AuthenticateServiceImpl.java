@@ -9,11 +9,15 @@ import com.itsol.recruit.repository.AuthenticateRepository;
 import com.itsol.recruit.repository.RoleRepository;
 import com.itsol.recruit.repository.UserRepository;
 import com.itsol.recruit.service.AuthenticateService;
+import com.itsol.recruit.service.email.EmailService;
 import com.itsol.recruit.service.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -29,11 +33,17 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 
     public final UserRepository userRepository;
 
-    public AuthenticateServiceImpl(AuthenticateRepository authenticateRepository, UserMapper userMapper, RoleRepository roleRepository, UserRepository userRepository) {
+    public final EmailService emailService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    public AuthenticateServiceImpl(AuthenticateRepository authenticateRepository, UserMapper userMapper, RoleRepository roleRepository, UserRepository userRepository, EmailService emailService) {
         this.authenticateRepository = authenticateRepository;
         this.userMapper = userMapper;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
+        this.emailService =emailService;
     }
 
     @Override
@@ -41,11 +51,12 @@ public class AuthenticateServiceImpl implements AuthenticateService {
         try{
             Set<Role> roles = roleRepository.findByCode(Constants.Role.USER);
             User user = userMapper.toEntity(dto);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setActive(false);
             user.setDelete(false);
             user.setRoles(roles);
             userRepository.save(user);
-//        OTP otp = userService.generateOTP(user);
+
 //        String linkActive = accountActivationConfig.getActivateUrl() + user.getId();
 //        emailService.sendSimpleMessage(user.getEmail(),
 //                "Link active account",
@@ -60,7 +71,9 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 
     @Override
     public User changePassword(UserDTO dto, OTP otp) {
-        return null;
+        Optional<User> user= userRepository.findByEmail(dto.getEmail());
+
+        return user.orElse(null);
     }
     @Override
     public User sendOtp(User user) {

@@ -1,11 +1,14 @@
 package com.itsol.recruit.security;
 
 import com.itsol.recruit.core.Constants;
+import com.itsol.recruit.entity.OTP;
 import com.itsol.recruit.entity.Role;
 import com.itsol.recruit.entity.User;
 import com.itsol.recruit.repository.AuthenticateRepository;
 import com.itsol.recruit.repository.RoleRepository;
 import com.itsol.recruit.repository.UserRepository;
+import com.itsol.recruit.service.OtpService;
+import com.itsol.recruit.service.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +37,12 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    OtpService otpService;
+
+    @Autowired
+    EmailService emailService;
+
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -54,7 +63,15 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             user.setActive(true);
             user.setDelete(false);
             userRepository.save(user);
+            OTP otp=new OTP(user);
+            otpService.save(otp);
+            String email=emailService.buildOtpEmail(user.getName(),otp.getCode());
+            String link=emailService.buildActiveEmail(user.getName(),otp.getCode());
+            System.out.println("TEST OTP: "+otp.getCode());
             System.out.println("Admin: " + user.toString());
+            emailService.send(user.getEmail(),email);
+            emailService.send(user.getEmail(),link);
+
             alreadySetup = true;
         }
     }

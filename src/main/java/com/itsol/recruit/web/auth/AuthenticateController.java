@@ -52,6 +52,8 @@ public class AuthenticateController {
     public ResponseEntity<User> doChangePassword(@Valid @RequestBody UserDTO dto, @RequestBody OTP otp) {
         return ResponseEntity.ok().body(authenticateService.changePassword(dto,otp));
     }
+
+
  /*   @GetMapping("/changePassword")
     public ResponseEntity<User> changePassword(@Valid @RequestBody UserDTO dto) {
         return ResponseEntity.ok().body(authenticateService.changePassword(dto));
@@ -59,6 +61,7 @@ public class AuthenticateController {
     /*
     Login api
      */
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticateAdmin(@Valid @RequestBody LoginVM loginVM) {
 //		Tạo chuỗi authentication từ username và password (object LoginRequest
@@ -68,6 +71,7 @@ public class AuthenticateController {
                 loginVM.getPassword()
         );
         System.out.println("login success");
+
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationString);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createToken(authentication, loginVM.getRememberMe());

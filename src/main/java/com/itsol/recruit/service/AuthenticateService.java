@@ -6,7 +6,7 @@ import com.itsol.recruit.entity.OTP;
 import com.itsol.recruit.entity.User;
 
 public interface AuthenticateService {
-    public User signup(UserDTO dto);
+     User signup(UserDTO dto);
 
     User changePassword(UserDTO dto, OTP otp);
 

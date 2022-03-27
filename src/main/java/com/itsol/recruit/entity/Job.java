@@ -41,7 +41,7 @@ public class Job {
 
     @ManyToOne
     @JoinColumn(name = "academic_level_id")
-    AcademicLevel academicLevel ;
+    AcademicLevel academicLevel;
 
     @ManyToOne
     @JoinColumn(name = "rank_id")

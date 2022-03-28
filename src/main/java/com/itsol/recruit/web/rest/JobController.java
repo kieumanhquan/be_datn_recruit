@@ -11,17 +11,22 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/jobs")
+@RequestMapping(value = "api/jobs")
 public class JobController {
 
     @Autowired
     private JobService jobService;
 
-    @GetMapping
+    @GetMapping("/searches")
     public List<Job> find(@RequestParam(name = "name") String name, @RequestParam(name = "numberExperience") int numberExperience,
                           @RequestParam(name = "salaryMin") int salaryMin, @RequestParam(name = "salaryMax") int salaryMax,
                           @RequestParam(name = "page") int pageNumber, @RequestParam(name = "size") int pageSize) {
         return jobService.find(name, numberExperience, salaryMin, salaryMax, pageNumber, pageSize);
+    }
+
+    @GetMapping()
+    public List<Job> findAll() {
+        return jobService.findAll();
     }
 
     @PostMapping
@@ -38,4 +43,6 @@ public class JobController {
     public ResponseEntity<Job> getById(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(jobService.getById(id));
     }
+
+
 }

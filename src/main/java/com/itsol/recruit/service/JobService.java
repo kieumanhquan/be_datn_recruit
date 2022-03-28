@@ -13,4 +13,6 @@ public interface JobService {
     Job update(JobDTO jobDTO);
 
     Job getById(Long id);
+
+    List<Job> findAll();
 }

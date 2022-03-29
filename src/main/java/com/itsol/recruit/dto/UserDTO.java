@@ -27,4 +27,6 @@ public class UserDTO {
     String newPassword;
 
     Date birthDay;
+
+    String otp;
 }

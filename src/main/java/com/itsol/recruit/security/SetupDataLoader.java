@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.HashSet;
+
 import java.util.Set;
 
 @Configuration
@@ -66,7 +66,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             OTP otp=new OTP(user);
             otpService.save(otp);
             String email=emailService.buildOtpEmail(user.getName(),otp.getCode());
-            String link=emailService.buildActiveEmail(user.getName(),otp.getCode());
+            String link=emailService.buildActiveEmail(user.getName(),otp.getCode(),user.getId());
             System.out.println("TEST OTP: "+otp.getCode());
             System.out.println("Admin: " + user.toString());
             emailService.send(user.getEmail(),email);

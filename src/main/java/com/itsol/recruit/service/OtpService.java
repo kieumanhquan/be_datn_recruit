@@ -1,5 +1,6 @@
 package com.itsol.recruit.service;
 
+import com.itsol.recruit.dto.UserDTO;
 import com.itsol.recruit.entity.OTP;
 import com.itsol.recruit.entity.User;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,7 @@ public interface OtpService {
      boolean delete(Long id);
 
      boolean check(OTP otp,User user);
+
+     boolean sendOtp(UserDTO userDTO);
 
 }

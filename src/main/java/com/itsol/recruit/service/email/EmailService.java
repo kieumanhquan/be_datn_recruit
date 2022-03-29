@@ -40,8 +40,8 @@ public class EmailService implements EmailSender{
         }
     }
 
-    public String buildActiveEmail(String name, String otp) {
-        String link= "http://localhost:9090/"+ Constants.Api.Path.AUTH+"?otp="  + otp;
+    public String buildActiveEmail(String name, String otp,Long id) {
+        String link= "http://localhost:9090/api/auth"+ Constants.Api.Path.Account.ACTIVE_ACCOUNT+"?otp="  + otp +"&id="+ id;
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
                 "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +

@@ -6,10 +6,10 @@ import com.itsol.recruit.entity.OTP;
 import com.itsol.recruit.entity.User;
 
 public interface AuthenticateService {
-     User signup(UserDTO dto);
+     Boolean signup(UserDTO dto);
 
-    User changePassword(UserDTO dto, OTP otp);
+    Boolean changePassword(UserDTO dto);
 
+    Boolean activeAccount(String otp, Long userId);
 
-    User sendOtp(User user);
 }

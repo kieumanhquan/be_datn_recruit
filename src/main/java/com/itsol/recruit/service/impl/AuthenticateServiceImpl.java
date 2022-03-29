@@ -6,6 +6,7 @@ import com.itsol.recruit.entity.OTP;
 import com.itsol.recruit.entity.Role;
 import com.itsol.recruit.entity.User;
 import com.itsol.recruit.repository.AuthenticateRepository;
+import com.itsol.recruit.repository.OtpRepository;
 import com.itsol.recruit.repository.RoleRepository;
 import com.itsol.recruit.repository.UserRepository;
 import com.itsol.recruit.service.AuthenticateService;
@@ -36,6 +37,9 @@ public class AuthenticateServiceImpl implements AuthenticateService {
     public final EmailService emailService;
 
     @Autowired
+     OtpRepository otpRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     public AuthenticateServiceImpl(AuthenticateRepository authenticateRepository, UserMapper userMapper, RoleRepository roleRepository, UserRepository userRepository, EmailService emailService) {
@@ -47,7 +51,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
     }
 
     @Override
-    public User signup(UserDTO dto) {
+    public Boolean signup(UserDTO dto) {
         try{
             Set<Role> roles = roleRepository.findByCode(Constants.Role.USER);
             User user = userMapper.toEntity(dto);
@@ -56,27 +60,74 @@ public class AuthenticateServiceImpl implements AuthenticateService {
             user.setDelete(false);
             user.setRoles(roles);
             userRepository.save(user);
-
+            OTP otp=new OTP(user);
+            otpRepository.save(otp);
+            String link=emailService.buildActiveEmail(user.getName(),otp.getCode(),user.getId());
+            emailService.send(user.getEmail(),link);
 //        String linkActive = accountActivationConfig.getActivateUrl() + user.getId();
 //        emailService.sendSimpleMessage(user.getEmail(),
 //                "Link active account",
 //                "<a href=\" " + linkActive + "\">Click vào đây để kích hoạt tài khoản</a>");*/
-            return user;
+            return true;
         }catch (Exception e){
             log.error("cannot save to database");
-            return  null;
+            return  false;
         }
 
     }
 
     @Override
-    public User changePassword(UserDTO dto, OTP otp) {
-        Optional<User> user= userRepository.findByEmail(dto.getEmail());
+    public Boolean changePassword(UserDTO dto) {
+        try{
+            Optional<User> user= userRepository.findByEmail(dto.getEmail());
 
-        return user.orElse(null);
+            if(user.isPresent()){
+                OTP dbOtp= otpRepository.findByUser(user.get());
+                User tempUser=user.get();
+                System.out.println("old pass: "+ tempUser.getPassword());
+                if(dbOtp.isExpired()){
+                    System.out.println("het han");
+                    return false;
+                }else{
+                    if(dbOtp.getCode().equals(dto.getOtp())){
+                        tempUser.setPassword(passwordEncoder.encode(dto.getPassword()));
+                        System.out.println("new pass : "+ tempUser.getPassword());
+                    userRepository.save(tempUser);
+                    return true;
+                    }else {
+                        System.out.println(dbOtp.getCode());
+                        System.out.println(dto.getOtp());
+                        System.out.println("sai code");
+                        return false;
+                    }
+                }
+            }
+        }catch(Exception e){
+            System.out.println(e);
+            return false;
+        }
+        return true;
     }
+
     @Override
-    public User sendOtp(User user) {
-        return null;
+    public Boolean activeAccount(String otp, Long userId) {
+        try{
+            Optional<User> dbUser=userRepository.findById(userId);
+            if(dbUser.isPresent()){
+                User user=dbUser.get();
+                OTP dbOtp= otpRepository.findByUser(user);
+                if(dbOtp.getCode().equals(otp)){
+                   user.setActive(true);
+                   userRepository.save(user);
+                    return true;
+                }
+
+            }else{return false;}
+        }catch(Exception e){
+            System.out.println(e);
+            return false;
+        }
+        return true;
     }
+
 }

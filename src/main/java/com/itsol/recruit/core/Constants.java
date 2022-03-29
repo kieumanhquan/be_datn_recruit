@@ -49,8 +49,8 @@ public final class Constants {
             public static final String PUBLIC = PREFIX + "/public";
             public static final String ADMIN = PREFIX + "/admin";
             public static final String AUTH = PREFIX + "/auth";
-//            public static final String ACCOUNT = PREFIX + "/account";
-//            public static final String ON_BOARDING = PUBLIC + "/on-boarding";
+            public static final String ACCOUNT = PREFIX + "/account";
+            public static final String ON_BOARDING = PUBLIC + "/on-boarding";
 
             public static class Auth {
                 public static final String LOGIN = "/login";
@@ -63,10 +63,11 @@ public final class Constants {
 
             public static class Account {
                 public static final String REGISTER = "/register";
-                public static final String CHANGE_PASSWORD = "/change-password";
-                public static final String RESET_PASSWORD = "/reset-password";
-                public static final String RESET_PASSWORD_INIT = RESET_PASSWORD + "/init";
-                public static final String RESET_PASSWORD_FINISH = RESET_PASSWORD + "/finish";
+                public static final String ACTIVE_ACCOUNT = "/active-account";
+                public static final String CHANGE_PASSWORD = "/change-password";//login r mới đổi - bỏ
+                public static final String RESET_PASSWORD = "/reset-password";// bắt đầu chuyển sang trang nhập mail
+                public static final String RESET_PASSWORD_INIT = RESET_PASSWORD + "/init";// nhập mail và ấn nhận otp
+                public static final String RESET_PASSWORD_FINISH = RESET_PASSWORD + "/finish";// gửi mật khẩu mới,mail otp để đổi mật khẩu
             }
 
             public static class Admin {

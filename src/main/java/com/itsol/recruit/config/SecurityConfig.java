@@ -3,9 +3,7 @@ package com.itsol.recruit.config;
 import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.security.jwt.JWTConfigurer;
 import com.itsol.recruit.security.jwt.TokenProvider;
-
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -54,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers(Constants.Api.Path.AUTH+ "/**").permitAll()
                 .antMatchers("/api/logout").permitAll()
                 .antMatchers("/api/register").permitAll()
+                .antMatchers("/jobs/**").permitAll()
                 .antMatchers("/api/admin/**").hasAnyRole(Constants.Role.ADMIN)
                 .antMatchers("/api/je/**").hasAnyRole(Constants.Role.JE, Constants.Role.ADMIN)
                 .antMatchers("/api/user/**").hasAnyRole(Constants.Role.JE, Constants.Role.ADMIN,Constants.Role.USER)

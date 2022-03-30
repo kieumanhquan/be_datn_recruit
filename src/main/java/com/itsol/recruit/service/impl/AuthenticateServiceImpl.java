@@ -57,7 +57,6 @@ public class AuthenticateServiceImpl implements AuthenticateService {
             User user = userMapper.toEntity(dto);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setActive(false);
-            user.setDelete(false);
             user.setRoles(roles);
             userRepository.save(user);
             OTP otp=new OTP(user);

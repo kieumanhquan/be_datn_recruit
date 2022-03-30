@@ -41,7 +41,7 @@ public class Job {
 
     @ManyToOne
     @JoinColumn(name = "academic_level_id")
-    AcademicLevel academicLevel ;
+    AcademicLevel academicLevel;
 
     @ManyToOne
     @JoinColumn(name = "rank_id")
@@ -51,7 +51,7 @@ public class Job {
     Integer qtyPerson;
 
     @Column(name = "start_recruitment_date")
-    Date startRecruitmentDate ;
+    Date startRecruitmentDate;
 
     @Column(name = "due_date")
     Date dueDate;
@@ -80,7 +80,7 @@ public class Job {
 
     @ManyToOne
     @JoinColumn(name = "create_id")
-    User creater;
+    User creator;
 
     @Column(name = "create_date")
     Date createDate ;

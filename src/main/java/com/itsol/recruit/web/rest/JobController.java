@@ -1,6 +1,7 @@
 package com.itsol.recruit.web.rest;
 
 import com.itsol.recruit.dto.JobDTO;
+import com.itsol.recruit.dto.JobPaginationDto;
 import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,13 @@ public class JobController {
                           @RequestParam(name = "salaryMin") int salaryMin, @RequestParam(name = "salaryMax") int salaryMax,
                           @RequestParam(name = "page") int pageNumber, @RequestParam(name = "size") int pageSize) {
         return jobService.find(name, numberExperience, salaryMin, salaryMax, pageNumber, pageSize);
+    }
+
+    @GetMapping("/searchesT")
+    public JobPaginationDto findTest(@RequestParam(name = "name") String name, @RequestParam(name = "statusJob") Long statusId,
+                                     @RequestParam(name = "salaryMin") int salaryMin, @RequestParam(name = "salaryMax") int salaryMax,
+                                     @RequestParam(name = "page") int pageNumber, @RequestParam(name = "size") int pageSize) {
+        return jobService.findTest(name, statusId, salaryMin, salaryMax, pageNumber, pageSize);
     }
 
     @GetMapping()

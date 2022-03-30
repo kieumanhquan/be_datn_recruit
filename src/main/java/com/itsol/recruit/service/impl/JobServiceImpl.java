@@ -1,6 +1,7 @@
 package com.itsol.recruit.service.impl;
 
 import com.itsol.recruit.dto.JobDTO;
+import com.itsol.recruit.dto.JobPaginationDto;
 import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.repository.JobRepository;
 import com.itsol.recruit.service.JobService;
@@ -26,6 +27,15 @@ public class JobServiceImpl implements JobService {
     public List<Job> find(String name, int numberExperience, int salaryMin, int salaryMax, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber,pageSize);
         return jobRepository.find("%"+name.toLowerCase()+"%",numberExperience, salaryMin, salaryMax, pageable).stream().collect(Collectors.toList());
+    }
+
+    @Override
+    public JobPaginationDto findTest(String name, Long statusId, int salaryMin, int salaryMax, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+        JobPaginationDto jobPaginationDto =  new JobPaginationDto();
+        jobPaginationDto.setList(jobRepository.findTest("%"+name.toLowerCase()+"%", statusId, salaryMin, salaryMax, pageable).stream().collect(Collectors.toList()));
+        jobPaginationDto.setTotalPage((long) jobRepository.findTest("%"+name.toLowerCase()+"%", statusId, salaryMin, salaryMax, pageable).getTotalPages());
+        return jobPaginationDto;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.itsol.recruit.dto;
 
-import com.itsol.recruit.entity.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -38,10 +37,10 @@ public class JobDTO {
     Integer qtyPerson;
 
     @NonNull
-    String startRecruitmentDate;
+    Date startRecruitmentDate;
 
     @NonNull
-    String dueDate;
+    Date dueDate;
 
     @NonNull
     String skills;
@@ -66,13 +65,13 @@ public class JobDTO {
 
     Long creatorId;
 
-    String createDate;
+    Date createDate;
 
     @NonNull
     Long updateUserId;
 
     @NonNull
-    String updateDate;
+    Date updateDate;
 
     @NonNull
     Long statusJobId;

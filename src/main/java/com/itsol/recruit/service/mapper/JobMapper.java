@@ -45,8 +45,8 @@ public class JobMapper implements EntityMapper<JobDTO, Job> {
         job.setRank(rankRepository.findOneById(dto.getRankId()));
         job.setQtyPerson(dto.getQtyPerson());
         job.setCreateDate(new Date());
-        job.setStartRecruitmentDate(simpleDateFormat.parse(dto.getStartRecruitmentDate()));
-        job.setDueDate(simpleDateFormat.parse(dto.getDueDate()));
+        job.setStartRecruitmentDate(dto.getStartRecruitmentDate());
+        job.setDueDate(dto.getDueDate());
         job.setSkills(dto.getSkills());
         job.setDescription(dto.getDescription());
         job.setBenefits(dto.getBenefits());
@@ -56,7 +56,7 @@ public class JobMapper implements EntityMapper<JobDTO, Job> {
         job.setContact(userRepository.findOneById(dto.getContactId()));
         job.setCreator(userRepository.findOneById(dto.getCreatorId()));
         job.setUpdateUser(userRepository.findOneById(dto.getUpdateUserId()));
-        job.setUpdateDate(simpleDateFormat.parse(dto.getUpdateDate()));
+        job.setUpdateDate(dto.getUpdateDate());
         job.setStatusJob(statusJobRepository.findOneById(dto.getStatusJobId()));
         job.setViews(dto.getViews());
         job.setDelete(false);
@@ -77,8 +77,8 @@ public class JobMapper implements EntityMapper<JobDTO, Job> {
         job.setAcademicLevel(academicLevelRepository.findOneById(dto.getAcademicLevelId()));
         job.setRank(rankRepository.findOneById(dto.getRankId()));
         job.setQtyPerson(dto.getQtyPerson());
-        job.setStartRecruitmentDate(simpleDateFormat.parse(dto.getStartRecruitmentDate()));
-        job.setDueDate(simpleDateFormat.parse(dto.getDueDate()));
+        job.setStartRecruitmentDate(dto.getStartRecruitmentDate());
+        job.setDueDate(dto.getDueDate());
         job.setSkills(dto.getSkills());
         job.setDescription(dto.getDescription());
         job.setBenefits(dto.getBenefits());
@@ -87,7 +87,7 @@ public class JobMapper implements EntityMapper<JobDTO, Job> {
         job.setSalaryMax(dto.getSalaryMax());
         job.setContact(userRepository.findOneById(dto.getContactId()));
         job.setUpdateUser(userRepository.findOneById(dto.getUpdateUserId()));
-        job.setUpdateDate(simpleDateFormat.parse(dto.getUpdateDate()));
+        job.setUpdateDate(dto.getUpdateDate());
         job.setStatusJob(statusJobRepository.findOneById(dto.getStatusJobId()));
         job.setViews(dto.getViews());
         job.setDelete(false);

@@ -51,6 +51,7 @@ public class AuthenticateController {
 
     @PostMapping(Constants.Api.Path.Account.REGISTER)
     public ResponseEntity<Boolean> register(@Valid @RequestBody UserDTO dto) {
+
         return ResponseEntity.ok().body(authenticateService.signup(dto));
     }
 

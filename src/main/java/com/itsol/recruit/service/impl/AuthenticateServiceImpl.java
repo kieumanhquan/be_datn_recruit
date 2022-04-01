@@ -36,6 +36,8 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 
     public final EmailService emailService;
 
+
+
     @Autowired
      OtpRepository otpRepository;
 
@@ -52,27 +54,28 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 
     @Override
     public Boolean signup(UserDTO dto) {
-        try{
-            Set<Role> roles = roleRepository.findByCode(Constants.Role.USER);
-            User user = userMapper.toEntity(dto);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setActive(false);
-            user.setRoles(roles);
-            userRepository.save(user);
-            OTP otp=new OTP(user);
-            otpRepository.save(otp);
-            String link=emailService.buildActiveEmail(user.getName(),otp.getCode(),user.getId());
-            emailService.send(user.getEmail(),link);
+        if (!userRepository.findByEmail(dto.getEmail()).isPresent() && !userRepository.findByUserName(dto.getUserName()).isPresent() && userRepository.findByPhoneNumber(dto.getPhoneNumber()).isPresent() ){
+            try{
+                Set<Role> roles = roleRepository.findByCode(Constants.Role.USER);
+                User user = userMapper.toEntity(dto);
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setActive(false);
+                user.setRoles(roles);
+                userRepository.save(user);
+                OTP otp=new OTP(user);
+                otpRepository.save(otp);
+                String link=emailService.buildActiveEmail(user.getName(),otp.getCode(),user.getId());
+                emailService.send(user.getEmail(),link);
 //        String linkActive = accountActivationConfig.getActivateUrl() + user.getId();
 //        emailService.sendSimpleMessage(user.getEmail(),
 //                "Link active account",
 //                "<a href=\" " + linkActive + "\">Click vào đây để kích hoạt tài khoản</a>");*/
-            return true;
-        }catch (Exception e){
-            log.error("cannot save to database");
-            return  false;
-        }
-
+                return true;
+            }catch (Exception e){
+                log.error("cannot save to database");
+                return  false;
+            }
+        }else return false;
     }
 
     @Override

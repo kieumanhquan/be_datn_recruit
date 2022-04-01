@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = Constants.Api.Path.JE+"/jobs")
+@RequestMapping(value = Constants.Api.Path.PUBLIC+"/jobs")
 public class JobController {
 
     @Autowired

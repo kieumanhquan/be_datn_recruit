@@ -5,6 +5,7 @@ import com.itsol.recruit.dto.JobDTO;
 import com.itsol.recruit.dto.JobPaginationDto;
 import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.service.JobService;
+import com.itsol.recruit.web.vm.SearchJobVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,24 +14,22 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = Constants.Api.Path.PUBLIC+"/jobs")
+@RequestMapping(value = Constants.Api.Path.PUBLIC + "/jobs")
 public class JobController {
 
     @Autowired
     private JobService jobService;
 
-    @GetMapping("/searches")
-    public JobPaginationDto find(@RequestParam(name = "name") String name, @RequestParam(name = "statusJob") Long statusId,
-                                     @RequestParam(name = "salaryMin") int salaryMin, @RequestParam(name = "salaryMax") int salaryMax,
-                                     @RequestParam(name = "page") int pageNumber, @RequestParam(name = "size") int pageSize) {
-        return jobService.find(name, statusId, salaryMin, salaryMax, pageNumber, pageSize);
+    @PostMapping("/searches")
+    public JobPaginationDto find(@RequestBody SearchJobVM searchJobVM, @RequestParam(name = "page") int pageNumber,
+                                 @RequestParam(name = "size") int pageSize) {
+        return jobService.find(searchJobVM, pageNumber, pageSize);
     }
 
-    @GetMapping("/searches/sortByName")
-    public JobPaginationDto sortByName(@RequestParam(name = "name") String name, @RequestParam(name = "statusJob") Long statusId,
-                                     @RequestParam(name = "salaryMin") int salaryMin, @RequestParam(name = "salaryMax") int salaryMax,
-                                     @RequestParam(name = "page") int pageNumber, @RequestParam(name = "size") int pageSize) {
-        return jobService.sortByName(name, statusId, salaryMin, salaryMax, pageNumber, pageSize);
+    @PostMapping("/searches/sortByName")
+    public JobPaginationDto sortByName(@RequestBody SearchJobVM searchJobVM, @RequestParam(name = "page") int pageNumber,
+                                       @RequestParam(name = "size") int pageSize) {
+        return jobService.find(searchJobVM, pageNumber, pageSize);
     }
 
     @GetMapping()
@@ -45,7 +44,7 @@ public class JobController {
 
     @PutMapping
     public ResponseEntity<Job> update(@Valid @RequestBody JobDTO jobDTO) {
-        return ResponseEntity.ok().body(jobService.update(jobDTO));
+        return ResponseEntity.ok().body(jobService.add(jobDTO));
     }
 
     @GetMapping("/id={id}")
@@ -54,4 +53,24 @@ public class JobController {
     }
 
 
+    @GetMapping("/news")
+    public ResponseEntity<JobPaginationDto> getNewJob(@RequestParam(name = "numberDay") Integer numberDay,
+                                                      @RequestParam(name = "page") int pageNumber,
+                                                      @RequestParam(name = "size") int pageSize) {
+        return ResponseEntity.ok().body(jobService.getNewJob(numberDay, pageNumber, pageSize));
+    }
+
+    @GetMapping("/salary-highs")
+    public ResponseEntity<JobPaginationDto> getHigghSalary(@RequestParam(name = "salary") Integer salary,
+                                                           @RequestParam(name = "page") int pageNumber,
+                                                           @RequestParam(name = "size") int pageSize) {
+        return ResponseEntity.ok().body(jobService.getJobHighSalary(salary, pageNumber, pageSize));
+    }
+
+    @GetMapping("/due-dates")
+    public ResponseEntity<JobPaginationDto> getJobDueDate(@RequestParam(name = "numberDay") Integer numberDay,
+                                                          @RequestParam(name = "page") int pageNumber,
+                                                          @RequestParam(name = "size") int pageSize) {
+        return ResponseEntity.ok().body(jobService.getJobDue(numberDay, pageNumber, pageSize));
+    }
 }

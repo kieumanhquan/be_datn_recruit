@@ -28,6 +28,9 @@ public class JobFiledController {
     @Autowired
     private RankRepository rankRepository;
 
+    @Autowired
+    private StatusJobRegisterRepository statusJobRegisterRepository;
+
     @GetMapping("/statusJobs")
     public List<StatusJob> findAllStatusJob() {
         return statusJobRepository.findAll();
@@ -51,6 +54,11 @@ public class JobFiledController {
     @GetMapping("/ranks")
     public List<Rank> findAllRanks() {
         return rankRepository.findAll();
+    }
+
+    @GetMapping("/status-register-jobs")
+    public List<StatusJobRegister> findAllStatusJobRegister() {
+        return statusJobRegisterRepository.findAll();
     }
 
 

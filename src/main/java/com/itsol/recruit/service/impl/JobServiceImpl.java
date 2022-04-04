@@ -4,6 +4,7 @@ import com.itsol.recruit.dto.JobDTO;
 import com.itsol.recruit.dto.JobPaginationDto;
 import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.repository.JobRepository;
+import com.itsol.recruit.repository.repoext.JobRepositoryExt;
 import com.itsol.recruit.service.JobService;
 import com.itsol.recruit.service.mapper.JobMapper;
 import com.itsol.recruit.web.vm.SearchJobVM;
@@ -26,19 +27,27 @@ public class JobServiceImpl implements JobService {
     @Autowired
     private JobMapper jobMapper;
 
+    @Autowired
+    private JobRepositoryExt jobRepositoryExt;
 
+
+//    @Override
+//    public JobPaginationDto find(SearchJobVM searchJobVM, int pageNumber, int pageSize) {
+//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+//        JobPaginationDto jobPaginationDto = new JobPaginationDto();
+//        jobPaginationDto.setList(jobRepository.find("%" + searchJobVM.getName().toLowerCase() + "%",
+//                searchJobVM.getStatusId(), searchJobVM.getSalaryMin(), searchJobVM.getSalaryMax(),
+//                pageable).stream().collect(Collectors.toList()));
+//
+//        jobPaginationDto.setTotalPage((long) jobRepository.find("%" + searchJobVM.getName().toLowerCase() + "%",
+//                searchJobVM.getStatusId(), searchJobVM.getSalaryMin(),
+//                searchJobVM.getSalaryMax(), pageable).getTotalPages());
+//        return jobPaginationDto;
+//    }
+//
     @Override
     public JobPaginationDto find(SearchJobVM searchJobVM, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        JobPaginationDto jobPaginationDto = new JobPaginationDto();
-        jobPaginationDto.setList(jobRepository.find("%" + searchJobVM.getName().toLowerCase() + "%",
-                searchJobVM.getStatusId(), searchJobVM.getSalaryMin(), searchJobVM.getSalaryMax(),
-                pageable).stream().collect(Collectors.toList()));
-
-        jobPaginationDto.setTotalPage((long) jobRepository.find("%" + searchJobVM.getName().toLowerCase() + "%",
-                searchJobVM.getStatusId(), searchJobVM.getSalaryMin(),
-                searchJobVM.getSalaryMax(), pageable).getTotalPages());
-        return jobPaginationDto;
+        return jobRepositoryExt.search(searchJobVM,pageNumber,pageSize);
     }
 
     @Override

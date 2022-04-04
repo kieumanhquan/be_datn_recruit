@@ -1,5 +1,6 @@
 package com.itsol.recruit.service.impl;
 
+import com.itsol.recruit.dto.MessageDto;
 import com.itsol.recruit.dto.UserDTO;
 import com.itsol.recruit.entity.OTP;
 import com.itsol.recruit.entity.User;
@@ -36,17 +37,6 @@ public class OtpServiceImpl implements OtpService {
      public OTP findByUserId(Long id){
         return new OTP();
     }
-    @Override
-    public boolean save(OTP otp) {
-        try {
-            otpRepository.save(otp);
-            return true;
-        }
-        catch(Exception e) {
-            System.out.println(e);
-            return false;
-        }
-    }
 
     @Override
     public boolean edit(OTP otp) {
@@ -64,17 +54,33 @@ public class OtpServiceImpl implements OtpService {
     }
 
     @Override
-    public boolean sendOtp(UserDTO userDTO) {
+    public MessageDto sendOtp(UserDTO userDTO) {
+        MessageDto messageDto=new MessageDto();
+        Boolean obj=false;
       try{
           User user=  userService.findByEmail(userDTO.getEmail());
+          if(user==null){
+              messageDto.setMessage("Không tìm thấy Email.");
+              messageDto.setObj(false);
+          }else{
+
            OTP otp= new OTP(user);
-           otpRepository.save(otp);
+           OTP oldOtp= otpRepository.findOneByUser(user);
+           if(oldOtp !=null){
+               oldOtp.setCode(otp.getCode());
+               otpRepository.save(oldOtp);
+           }
+           else{
+               otpRepository.save(otp);
+           }
            String email=emailService.buildOtpEmail(user.getName(),otp.getCode());
            emailService.send(user.getEmail(),email);
-           return true;
+           messageDto.setMessage("Đã gửi mã OTP đến mail vừa nhập.");
+           messageDto.setObj(userDTO);
+          }
       }catch (Exception e){
           System.out.println(e);
-          return false;
         }
+      return messageDto;
     }
 }

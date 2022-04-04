@@ -1,6 +1,7 @@
 package com.itsol.recruit.web.auth;
 
 import com.itsol.recruit.core.Constants;
+import com.itsol.recruit.dto.MessageDto;
 import com.itsol.recruit.dto.UserDTO;
 import com.itsol.recruit.entity.OTP;
 import com.itsol.recruit.entity.User;
@@ -51,6 +52,7 @@ public class AuthenticateController {
 
     @PostMapping(Constants.Api.Path.Account.REGISTER)
     public ResponseEntity<Boolean> register(@Valid @RequestBody UserDTO dto) {
+
         return ResponseEntity.ok().body(authenticateService.signup(dto));
     }
 
@@ -60,12 +62,14 @@ public class AuthenticateController {
     }
 
     @PostMapping(Constants.Api.Path.Account.RESET_PASSWORD_FINISH)
-    public ResponseEntity<Boolean> resetPassword(@Valid @RequestBody UserDTO dto) {
+    public ResponseEntity<MessageDto> resetPassword(@Valid @RequestBody UserDTO dto,@RequestParam String email) {
+        dto.setEmail(email);
+        System.out.println(dto.getEmail());
         return ResponseEntity.ok().body(authenticateService.changePassword(dto));
     }
 
     @PostMapping(Constants.Api.Path.Account.RESET_PASSWORD_INIT)
-    public ResponseEntity<Boolean> resetPasswordInit(@Valid @RequestBody UserDTO dto) {
+    public ResponseEntity<MessageDto> resetPasswordInit(@Valid @RequestBody UserDTO dto) {
         return ResponseEntity.ok().body(otpService.sendOtp(dto));
     }
 

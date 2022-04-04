@@ -10,4 +10,5 @@ public interface OtpRepository  extends JpaRepository<OTP, Long> {
 
     OTP  findByUser(User user);
 
+    OTP findOneByUser(User user);
 }

@@ -1,5 +1,6 @@
 package com.itsol.recruit.service;
 
+import com.itsol.recruit.dto.MessageDto;
 import com.itsol.recruit.dto.UserDTO;
 import com.itsol.recruit.entity.OTP;
 import com.itsol.recruit.entity.User;
@@ -16,14 +17,12 @@ public interface OtpService {
 
      OTP findByUserId(Long id);
 
-     boolean save(OTP otp);
-
      boolean edit(OTP otp);
 
      boolean delete(Long id);
 
      boolean check(OTP otp,User user);
 
-     boolean sendOtp(UserDTO userDTO);
+     MessageDto sendOtp(UserDTO userDTO);
 
 }

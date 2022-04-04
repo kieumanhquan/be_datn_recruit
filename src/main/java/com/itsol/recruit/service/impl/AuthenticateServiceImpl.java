@@ -1,6 +1,7 @@
 package com.itsol.recruit.service.impl;
 
 import com.itsol.recruit.core.Constants;
+import com.itsol.recruit.dto.MessageDto;
 import com.itsol.recruit.dto.UserDTO;
 import com.itsol.recruit.entity.OTP;
 import com.itsol.recruit.entity.Role;
@@ -54,7 +55,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 
     @Override
     public Boolean signup(UserDTO dto) {
-        if (!userRepository.findByEmail(dto.getEmail()).isPresent() && !userRepository.findByUserName(dto.getUserName()).isPresent() && userRepository.findByPhoneNumber(dto.getPhoneNumber()).isPresent() ){
+        if (!userRepository.findOneByEmail(dto.getEmail()).isPresent() && !userRepository.findByUserName(dto.getUserName()).isPresent() && !userRepository.findByPhoneNumber(dto.getPhoneNumber()).isPresent() ){
             try{
                 Set<Role> roles = roleRepository.findByCode(Constants.Role.USER);
                 User user = userMapper.toEntity(dto);
@@ -66,10 +67,6 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                 otpRepository.save(otp);
                 String link=emailService.buildActiveEmail(user.getName(),otp.getCode(),user.getId());
                 emailService.send(user.getEmail(),link);
-//        String linkActive = accountActivationConfig.getActivateUrl() + user.getId();
-//        emailService.sendSimpleMessage(user.getEmail(),
-//                "Link active account",
-//                "<a href=\" " + linkActive + "\">Click vào đây để kích hoạt tài khoản</a>");*/
                 return true;
             }catch (Exception e){
                 log.error("cannot save to database");
@@ -79,36 +76,37 @@ public class AuthenticateServiceImpl implements AuthenticateService {
     }
 
     @Override
-    public Boolean changePassword(UserDTO dto) {
+    public MessageDto changePassword(UserDTO dto) {
+        Boolean obj=false;
+        String message="";
         try{
-            Optional<User> user= userRepository.findByEmail(dto.getEmail());
-
+            Optional<User> user= userRepository.findOneByEmail(dto.getEmail());
             if(user.isPresent()){
                 OTP dbOtp= otpRepository.findByUser(user.get());
                 User tempUser=user.get();
                 System.out.println("old pass: "+ tempUser.getPassword());
                 if(dbOtp.isExpired()){
-                    System.out.println("het han");
-                    return false;
+                    message="Mã otp đã hết hạn";
                 }else{
                     if(dbOtp.getCode().equals(dto.getOtp())){
                         tempUser.setPassword(passwordEncoder.encode(dto.getPassword()));
-                        System.out.println("new pass : "+ tempUser.getPassword());
                     userRepository.save(tempUser);
-                    return true;
+                   message="Đổi mật khẩu thành công";
                     }else {
                         System.out.println(dbOtp.getCode());
                         System.out.println(dto.getOtp());
-                        System.out.println("sai code");
-                        return false;
+                        message="Mã otp không đúng vui lòng thử lại";
                     }
                 }
             }
         }catch(Exception e){
             System.out.println(e);
-            return false;
+            message= "Đã sảy ra lỗi trong quá trình đổi mật khẩu vui lòng thử lại sau.";
         }
-        return true;
+        MessageDto messageDto=new MessageDto( );
+        messageDto.setObj(obj);
+        messageDto.setMessage(message);
+        return messageDto;
     }
 
     @Override

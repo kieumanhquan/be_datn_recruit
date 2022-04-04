@@ -23,18 +23,22 @@ public class JobServiceImpl implements JobService {
     @Autowired
     private JobMapper jobMapper;
 
+
     @Override
-    public List<Job> find(String name, int numberExperience, int salaryMin, int salaryMax, int pageNumber, int pageSize) {
+    public JobPaginationDto find(String name, Long statusId, int salaryMin, int salaryMax, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber,pageSize);
-        return jobRepository.find("%"+name.toLowerCase()+"%",numberExperience, salaryMin, salaryMax, pageable).stream().collect(Collectors.toList());
+        JobPaginationDto jobPaginationDto =  new JobPaginationDto();
+        jobPaginationDto.setList(jobRepository.find("%"+name.toLowerCase()+"%", statusId, salaryMin, salaryMax, pageable).stream().collect(Collectors.toList()));
+        jobPaginationDto.setTotalPage((long) jobRepository.find("%"+name.toLowerCase()+"%", statusId, salaryMin, salaryMax, pageable).getTotalPages());
+        return jobPaginationDto;
     }
 
     @Override
-    public JobPaginationDto findTest(String name, Long statusId, int salaryMin, int salaryMax, int pageNumber, int pageSize) {
+    public JobPaginationDto sortByName(String name, Long statusId, int salaryMin, int salaryMax, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber,pageSize);
         JobPaginationDto jobPaginationDto =  new JobPaginationDto();
-        jobPaginationDto.setList(jobRepository.findTest("%"+name.toLowerCase()+"%", statusId, salaryMin, salaryMax, pageable).stream().collect(Collectors.toList()));
-        jobPaginationDto.setTotalPage((long) jobRepository.findTest("%"+name.toLowerCase()+"%", statusId, salaryMin, salaryMax, pageable).getTotalPages());
+        jobPaginationDto.setList(jobRepository.sortByName("%"+name.toLowerCase()+"%", statusId, salaryMin, salaryMax, pageable).stream().collect(Collectors.toList()));
+        jobPaginationDto.setTotalPage((long) jobRepository.sortByName("%"+name.toLowerCase()+"%", statusId, salaryMin, salaryMax, pageable).getTotalPages());
         return jobPaginationDto;
     }
 

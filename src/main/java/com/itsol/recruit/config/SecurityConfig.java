@@ -52,9 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers(Constants.Api.Path.AUTH+ "/**").permitAll()
                 .antMatchers("/api/logout").permitAll()
                 .antMatchers("/api/register").permitAll()
-                .antMatchers("/jobs/**").permitAll()
+                .antMatchers("/api/je/**").permitAll()
                 .antMatchers("/api/admin/**").hasAnyRole(Constants.Role.ADMIN)
-                .antMatchers("/api/je/**").hasAnyRole(Constants.Role.JE, Constants.Role.ADMIN)
+//                .antMatchers("/api/je/**").hasAnyRole(Constants.Role.JE, Constants.Role.ADMIN)
                 .antMatchers("/api/user/**").hasAnyRole(Constants.Role.JE, Constants.Role.ADMIN,Constants.Role.USER)
                 .antMatchers("/api/public/**").permitAll()
 

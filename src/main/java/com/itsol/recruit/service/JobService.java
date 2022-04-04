@@ -7,9 +7,10 @@ import com.itsol.recruit.entity.Job;
 import java.util.List;
 
 public interface JobService {
-    List<Job> find(String name, int numberExperience, int salaryMin, int salaryMax, int pageNumber, int pageSize);
 
-    JobPaginationDto findTest(String name, Long statusId, int salaryMin, int salaryMax, int pageNumber, int pageSize);
+    JobPaginationDto find(String name, Long statusId, int salaryMin, int salaryMax, int pageNumber, int pageSize);
+
+    JobPaginationDto sortByName(String name, Long statusId, int salaryMin, int salaryMax, int pageNumber, int pageSize);
 
     Job add(JobDTO jobDTO);
 

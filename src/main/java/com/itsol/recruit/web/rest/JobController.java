@@ -1,5 +1,6 @@
 package com.itsol.recruit.web.rest;
 
+import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.dto.JobDTO;
 import com.itsol.recruit.dto.JobPaginationDto;
 import com.itsol.recruit.entity.Job;
@@ -12,24 +13,24 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "api/jobs")
+@RequestMapping(value = Constants.Api.Path.PUBLIC+"/jobs")
 public class JobController {
 
     @Autowired
     private JobService jobService;
 
     @GetMapping("/searches")
-    public List<Job> find(@RequestParam(name = "name") String name, @RequestParam(name = "numberExperience") int numberExperience,
-                          @RequestParam(name = "salaryMin") int salaryMin, @RequestParam(name = "salaryMax") int salaryMax,
-                          @RequestParam(name = "page") int pageNumber, @RequestParam(name = "size") int pageSize) {
-        return jobService.find(name, numberExperience, salaryMin, salaryMax, pageNumber, pageSize);
-    }
-
-    @GetMapping("/searchesT")
-    public JobPaginationDto findTest(@RequestParam(name = "name") String name, @RequestParam(name = "statusJob") Long statusId,
+    public JobPaginationDto find(@RequestParam(name = "name") String name, @RequestParam(name = "statusJob") Long statusId,
                                      @RequestParam(name = "salaryMin") int salaryMin, @RequestParam(name = "salaryMax") int salaryMax,
                                      @RequestParam(name = "page") int pageNumber, @RequestParam(name = "size") int pageSize) {
-        return jobService.findTest(name, statusId, salaryMin, salaryMax, pageNumber, pageSize);
+        return jobService.find(name, statusId, salaryMin, salaryMax, pageNumber, pageSize);
+    }
+
+    @GetMapping("/searches/sortByName")
+    public JobPaginationDto sortByName(@RequestParam(name = "name") String name, @RequestParam(name = "statusJob") Long statusId,
+                                     @RequestParam(name = "salaryMin") int salaryMin, @RequestParam(name = "salaryMax") int salaryMax,
+                                     @RequestParam(name = "page") int pageNumber, @RequestParam(name = "size") int pageSize) {
+        return jobService.sortByName(name, statusId, salaryMin, salaryMax, pageNumber, pageSize);
     }
 
     @GetMapping()

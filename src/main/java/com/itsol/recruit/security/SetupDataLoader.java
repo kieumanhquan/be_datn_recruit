@@ -47,6 +47,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     EmailService emailService;
 
     @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+
+    }
+
+   /* @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
@@ -76,5 +81,5 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             emailService.send(user.getEmail(),link);
             alreadySetup = true;
         }
-    }
+    }*/
 }

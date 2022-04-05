@@ -4,6 +4,7 @@ import com.itsol.recruit.dto.JobDTO;
 import com.itsol.recruit.dto.JobPaginationDto;
 import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.repository.JobRepository;
+import com.itsol.recruit.repository.StatusJobRepository;
 import com.itsol.recruit.repository.repoext.JobRepositoryExt;
 import com.itsol.recruit.service.JobService;
 import com.itsol.recruit.service.mapper.JobMapper;
@@ -29,6 +30,9 @@ public class JobServiceImpl implements JobService {
 
     @Autowired
     private JobRepositoryExt jobRepositoryExt;
+
+    @Autowired
+    private StatusJobRepository statusJobRepository;
 
 
 //    @Override
@@ -125,5 +129,10 @@ public class JobServiceImpl implements JobService {
         jobPaginationDto.setList(jobRepository.getJobDue(dt,pageable).stream().collect(Collectors.toList()));
         jobPaginationDto.setTotalPage((long) jobRepository.getJobDue(dt,pageable).getTotalPages());
         return jobPaginationDto;
+    }
+
+    @Override
+    public void updateStatus(Long jobId, Long statusId){
+         jobRepository.updateStatus(jobId,statusJobRepository.findOneById(statusId));
     }
 }

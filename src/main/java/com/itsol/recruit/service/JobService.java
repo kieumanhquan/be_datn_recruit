@@ -24,4 +24,6 @@ public interface JobService {
     JobPaginationDto getJobHighSalary(Integer salary, int pageNumber, int pageSize);
 
     JobPaginationDto getJobDue(Integer numberDay, int pageNumber, int pageSize);
+
+    void updateStatus(Long jobId, Long statusId);
 }

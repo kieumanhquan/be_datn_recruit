@@ -42,16 +42,12 @@ public class JobDTO {
     @NonNull
     Date dueDate;
 
-    @NonNull
     String skills;
 
-    @NonNull
     String description;
 
-    @NonNull
     String benefits;
 
-    @NonNull
     String jobRequirement;
 
     @NonNull

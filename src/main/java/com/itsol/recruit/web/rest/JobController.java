@@ -73,4 +73,11 @@ public class JobController {
                                                           @RequestParam(name = "size") int pageSize) {
         return ResponseEntity.ok().body(jobService.getJobDue(numberDay, pageNumber, pageSize));
     }
+
+    @PostMapping("/status_job")
+    public void updateStatusJob(@RequestParam(name = "status_id") Long statusJob,
+                                                @RequestParam(name = "job_id") Long id
+    ) {
+       jobService.updateStatus(id,statusJob);
+    }
 }

@@ -1,13 +1,16 @@
 package com.itsol.recruit.repository;
 
 import com.itsol.recruit.entity.Job;
+import com.itsol.recruit.entity.StatusJob;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 
 @Repository
@@ -46,4 +49,9 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             "where JOB.STATUS_ID = 2 " +
             "group by JOB.id ) temp on temp.id = JOB.id where temp.countJob < JOB.qty_person  and JOB.due_date <= :number_date", nativeQuery = true)
     Page<Job> getJobDue(@Param("number_date") Date numberDate, Pageable pageable);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update job u set u.statusJob = :status_job where u.id = :job_id")
+    void updateStatus(@Param("job_id") Long jobId,@Param("status_job") StatusJob statusJob);
 }

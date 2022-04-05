@@ -63,11 +63,11 @@ public class OtpServiceImpl implements OtpService {
               messageDto.setMessage("Không tìm thấy Email.");
               messageDto.setObj(false);
           }else{
-
            OTP otp= new OTP(user);
            OTP oldOtp= otpRepository.findOneByUser(user);
            if(oldOtp !=null){
                oldOtp.setCode(otp.getCode());
+               oldOtp.setIssueAt(otp.getIssueAt());
                otpRepository.save(oldOtp);
            }
            else{
@@ -75,7 +75,7 @@ public class OtpServiceImpl implements OtpService {
            }
            String email=emailService.buildOtpEmail(user.getName(),otp.getCode());
            emailService.send(user.getEmail(),email);
-           messageDto.setMessage("Đã gửi mã OTP đến mail vừa nhập.");
+           messageDto.setMessage("Đã gửi mã OTP đến mail: " + user.getEmail() );
            messageDto.setObj(userDTO);
           }
       }catch (Exception e){

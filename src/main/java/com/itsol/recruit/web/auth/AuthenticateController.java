@@ -52,10 +52,12 @@ public class AuthenticateController {
 
     @PostMapping(Constants.Api.Path.Account.REGISTER)
     public ResponseEntity<Boolean> register(@Valid @RequestBody UserDTO dto) {
-
         return ResponseEntity.ok().body(authenticateService.signup(dto));
     }
-
+ @PostMapping(Constants.Api.Path.Account.CHANGE_PASSWORD)
+ public ResponseEntity<MessageDto> changePassword(@RequestBody UserDTO dto){
+        return ResponseEntity.ok().body(authenticateService.changePassword(dto));
+ }
     @GetMapping(Constants.Api.Path.Account.ACTIVE_ACCOUNT)
     public ResponseEntity<Boolean> activeAccount( @RequestParam("otp") String otp , @RequestParam("id") Long userId ) {
         return ResponseEntity.ok().body(authenticateService.activeAccount(otp,userId));

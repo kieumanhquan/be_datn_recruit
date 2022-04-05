@@ -21,10 +21,10 @@ public class User{
     @SequenceGenerator(name = "USERS_SEQ", sequenceName = "USERS_SEQ", allocationSize = 1, initialValue = 1)
     Long id;
 
-    @Column(name = "name")
+    @Column(name = "name",unique=true)
     String name;
 
-    @Column(name = "email")
+    @Column(name = "email",unique=true)
     String email;
 
     @Column(name = "user_name")
@@ -33,7 +33,7 @@ public class User{
     @Column(name = "password")
     String password;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number",unique=true)
     String phoneNumber;
 
     @Column(name = "home_town")

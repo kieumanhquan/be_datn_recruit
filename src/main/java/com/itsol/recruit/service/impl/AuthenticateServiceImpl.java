@@ -39,6 +39,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 
 
 
+
     @Autowired
      OtpRepository otpRepository;
 
@@ -77,7 +78,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 
     @Override
     public MessageDto changePassword(UserDTO dto) {
-        Boolean obj=false;
+        boolean obj=false;
         String message="";
         try{
             Optional<User> user= userRepository.findOneByEmail(dto.getEmail());
@@ -121,7 +122,6 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                    userRepository.save(user);
                     return true;
                 }
-
             }else{return false;}
         }catch(Exception e){
 

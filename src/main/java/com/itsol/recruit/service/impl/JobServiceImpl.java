@@ -2,6 +2,7 @@ package com.itsol.recruit.service.impl;
 
 import com.itsol.recruit.dto.JobDTO;
 import com.itsol.recruit.dto.JobPaginationDto;
+import com.itsol.recruit.dto.StatusDto;
 import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.repository.JobRepository;
 import com.itsol.recruit.repository.StatusJobRepository;
@@ -132,7 +133,9 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void updateStatus(Long jobId, Long statusId){
-         jobRepository.updateStatus(jobId,statusJobRepository.findOneById(statusId));
+    public Job updateStatus(StatusDto statusDto){
+        Job job = jobRepository.findOneById(statusDto.getJobId());
+        job.setStatusJob(statusJobRepository.findOneById(statusDto.getStatusId()));
+        return jobRepository.save(job);
     }
 }

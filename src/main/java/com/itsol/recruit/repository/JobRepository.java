@@ -50,8 +50,4 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             "group by JOB.id ) temp on temp.id = JOB.id where temp.countJob < JOB.qty_person  and JOB.due_date <= :number_date", nativeQuery = true)
     Page<Job> getJobDue(@Param("number_date") Date numberDate, Pageable pageable);
 
-    @Transactional
-    @Modifying
-    @Query(value = "update job u set u.statusJob = :status_job where u.id = :job_id")
-    void updateStatus(@Param("job_id") Long jobId,@Param("status_job") StatusJob statusJob);
 }

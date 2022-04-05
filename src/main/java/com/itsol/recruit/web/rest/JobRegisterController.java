@@ -2,12 +2,17 @@ package com.itsol.recruit.web.rest;
 
 import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.dto.JobRegisterPaginationDto;
+import com.itsol.recruit.dto.ScheduleDto;
+import com.itsol.recruit.dto.StatusRegisterDto;
 import com.itsol.recruit.entity.JobRegister;
 import com.itsol.recruit.entity.Profiles;
 import com.itsol.recruit.service.JobRegisterService;
 import com.itsol.recruit.service.ProfileService;
 import com.itsol.recruit.web.vm.SearchJobRegisterVM;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,4 +52,23 @@ public class JobRegisterController {
         return ResponseEntity.ok().body(jobRegisterService.getByJobId(id));
     }
 
+    @PutMapping("/status_job")
+    public ResponseEntity<JobRegister> updateStatusJob(@RequestBody StatusRegisterDto statusRegisterDto) {
+        return ResponseEntity.ok().body(jobRegisterService.updateStatus(statusRegisterDto));
+    }
+
+    @PutMapping("/schedule")
+    public ResponseEntity<JobRegister> schedule(@RequestBody ScheduleDto scheduleDto) {
+        return ResponseEntity.ok().body(jobRegisterService.schedule(scheduleDto));
+    }
+
+    @GetMapping("/download/{id}")
+    @CrossOrigin
+    public ResponseEntity<Resource> downloadApplicantCv(@PathVariable("id") Long id) throws Exception {
+        Resource resource = jobRegisterService.downloadCv(id);
+        String contentType="application/pdf";
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
 }

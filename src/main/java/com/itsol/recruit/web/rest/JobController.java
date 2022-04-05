@@ -3,6 +3,7 @@ package com.itsol.recruit.web.rest;
 import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.dto.JobDTO;
 import com.itsol.recruit.dto.JobPaginationDto;
+import com.itsol.recruit.dto.StatusDto;
 import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.service.JobService;
 import com.itsol.recruit.web.vm.SearchJobVM;
@@ -29,7 +30,7 @@ public class JobController {
     @PostMapping("/searches/sortByName")
     public JobPaginationDto sortByName(@RequestBody SearchJobVM searchJobVM, @RequestParam(name = "page") int pageNumber,
                                        @RequestParam(name = "size") int pageSize) {
-        return jobService.find(searchJobVM, pageNumber, pageSize);
+        return jobService.sortByName(searchJobVM, pageNumber, pageSize);
     }
 
     @GetMapping()
@@ -74,10 +75,8 @@ public class JobController {
         return ResponseEntity.ok().body(jobService.getJobDue(numberDay, pageNumber, pageSize));
     }
 
-    @PostMapping("/status_job")
-    public void updateStatusJob(@RequestParam(name = "status_id") Long statusJob,
-                                                @RequestParam(name = "job_id") Long id
-    ) {
-       jobService.updateStatus(id,statusJob);
+    @PutMapping("/status_job")
+    public ResponseEntity<Job> updateStatusJob(@RequestBody StatusDto statusDto) {
+        return ResponseEntity.ok().body(jobService.updateStatus(statusDto));
     }
 }

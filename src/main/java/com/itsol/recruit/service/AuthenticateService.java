@@ -10,4 +10,5 @@ public interface AuthenticateService {
 
     Boolean activeAccount(String otp, Long userId);
 
+    Boolean signupJe(UserDTO dto);
 }

@@ -129,4 +129,26 @@ public class AuthenticateServiceImpl implements AuthenticateService {
         return false;
     }
 
+    @Override
+    public Boolean signupJe(UserDTO dto) {
+        if (!userRepository.findOneByEmail(dto.getEmail()).isPresent() && !userRepository.findByUserName(dto.getUserName()).isPresent() && !userRepository.findByPhoneNumber(dto.getPhoneNumber()).isPresent() ){
+            try{
+                Set<Role> roles = roleRepository.findByCode(Constants.Role.JE);
+                User user = userMapper.toEntity(dto);
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setActive(false);
+                user.setRoles(roles);
+                userRepository.save(user);
+                OTP otp=new OTP(user);
+                otpRepository.save(otp);
+                String link=emailService.buildActiveEmail(user.getName(),otp.getCode(),user.getId());
+                emailService.send(user.getEmail(),link);
+                return true;
+            }catch (Exception e){
+                log.error("cannot save to database");
+                return  false;
+            }
+        }else return false;
+    }
+
 }

@@ -21,13 +21,13 @@ public class User{
     @SequenceGenerator(name = "USERS_SEQ", sequenceName = "USERS_SEQ", allocationSize = 1, initialValue = 1)
     Long id;
 
-    @Column(name = "name",unique=true)
+    @Column(name = "name")
     String name;
 
     @Column(name = "email",unique=true)
     String email;
 
-    @Column(name = "user_name")
+    @Column(name = "user_name",unique=true)
     String userName;
 
     @Column(name = "password")

@@ -54,6 +54,12 @@ public class AuthenticateController {
     public ResponseEntity<Boolean> register(@Valid @RequestBody UserDTO dto) {
         return ResponseEntity.ok().body(authenticateService.signup(dto));
     }
+
+
+    @PostMapping(Constants.Api.Path.Account.REGISTER+"Je")
+    public ResponseEntity<Boolean> registerJe(@Valid @RequestBody UserDTO dto) {
+        return ResponseEntity.ok().body(authenticateService.signupJe(dto));
+    }
  @PostMapping(Constants.Api.Path.Account.CHANGE_PASSWORD)
  public ResponseEntity<MessageDto> changePassword(@RequestBody UserDTO dto){
         return ResponseEntity.ok().body(authenticateService.changePassword(dto));

@@ -47,13 +47,18 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     EmailService emailService;
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-
-    }
-
-   /* @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
+      /*  Role role=new Role();
+        role.setId(1L);
+        role.setCode(Constants.Role.ADMIN);
+        roleRepository.save(role);
+        role.setId(2L);
+        role.setCode(Constants.Role.JE);
+        roleRepository.save(role);
+        role.setId(3L);
+        role.setCode(Constants.Role.USER);
+        roleRepository.save(role);
 
         if (alreadySetup) {
             return;
@@ -80,6 +85,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             emailService.send(user.getEmail(),email);
             emailService.send(user.getEmail(),link);
             alreadySetup = true;
-        }
-    }*/
+        }*/
+    }
 }

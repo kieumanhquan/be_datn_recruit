@@ -16,7 +16,10 @@ public final class Constants {
     public static final class OTP{
         public static final Long EXPIRED_TIME = 5 * 60 * 1000L;
     }
-
+    public static final class Gender{
+        public static final String MALE = "Nam";
+        public static final String FEMALE="Nữ";
+    }
     public static final class Status{
         public static final String PENDING = "pending";
         public static final String APPROVED = "approved";

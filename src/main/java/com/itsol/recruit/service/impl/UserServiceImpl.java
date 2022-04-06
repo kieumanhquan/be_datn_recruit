@@ -1,15 +1,23 @@
 package com.itsol.recruit.service.impl;
 
+import com.itsol.recruit.dto.JobPaginationDto;
+import com.itsol.recruit.dto.MessageDto;
+import com.itsol.recruit.dto.UserPaginationDto;
 import com.itsol.recruit.entity.Role;
 import com.itsol.recruit.entity.User;
 import com.itsol.recruit.repository.RoleRepository;
 import com.itsol.recruit.repository.UserRepository;
 import com.itsol.recruit.service.UserService;
+import com.itsol.recruit.web.vm.SearchJobVM;
+import com.itsol.recruit.web.vm.SearchUserVM;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -60,5 +68,34 @@ public class UserServiceImpl implements UserService {
         return userList;
     }
 
+    @Override
+    public MessageDto updateUser(User user) {
+        MessageDto message=new MessageDto();
+        if(userRepository.findByUserName(user.getUserName()).isPresent()){
+            User userDb=userRepository.findByUserName(user.getUserName()).get();
+            user.setPassword(userDb.getPassword());
+            user.setUserName(userDb.getUserName());
+            user.setId(userDb.getId());
+            userRepository.save(user);
+            message.setMessage("Sửa thông tin người dùng thành công");
+            message.setObj(true);
+        }else{
+            message.setMessage("Sửa thông tin người dùng thất bại");
+            message.setObj(false);
+        }
+        return message;
+    }
 
+
+    public  UserPaginationDto  find(SearchUserVM searchUserVM, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        UserPaginationDto userPaginationDto = new UserPaginationDto();
+        userPaginationDto.setList(userRepository.findBySearchUserVm("%" + searchUserVM.getUserName().toLowerCase() + "%",
+                "%"+searchUserVM.getPhoneNumber()+"%","%"+ searchUserVM.getEmail() +"%",
+                pageable).stream().collect(Collectors.toList()));
+        userPaginationDto.setTotalPage((long) userRepository.findBySearchUserVm("%" + searchUserVM.getUserName().toLowerCase() + "%",
+                "%"+searchUserVM.getPhoneNumber()+"%","%"+ searchUserVM.getEmail() +"%",
+                pageable).getTotalPages());
+        return userPaginationDto;
+    }
 }

@@ -199,7 +199,7 @@ public class EmailService implements EmailSender {
                 "</div></div>";
     }
 
-    public String builSchedule(JobRegister jobRegister) {
+    public String buildSchedule(JobRegister jobRegister) {
         SimpleDateFormat time = new SimpleDateFormat("HH:mm");
         SimpleDateFormat day = new SimpleDateFormat("dd/MM/yyyy");
         return "<div>\n" +

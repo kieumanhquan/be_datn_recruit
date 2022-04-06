@@ -80,14 +80,14 @@ public class JobRegisterServiceImpl implements JobRegisterService {
         jobRegister.setMethodInterview(scheduleDto.getMethodInterview());
         jobRegister.setAddressInterview(scheduleDto.getAddressInterview());
         User user = jobRegister.getUser();
-        String link=emailService.builSchedule(jobRegister);
+        String link=emailService.buildSchedule(jobRegister);
             emailService.send(user.getEmail(),link);
         return jobRegisterRepository.save(jobRegister);
     }
 
     @Override
     public Resource downloadCv(Long applicantId) throws IOException {
-        JobRegister jobRegister = jobRegisterRepository.getById(applicantId);
+        JobRegister jobRegister = jobRegisterRepository.findOneById(applicantId);
         if (ObjectUtils.isEmpty(jobRegister)) {
             throw new NullPointerException("Could not found applicant");
         }
@@ -100,4 +100,7 @@ public class JobRegisterServiceImpl implements JobRegisterService {
         }
         return resource;
     }
+
+
+
 }

@@ -117,6 +117,7 @@ public class JobRepositoryImpl extends BaseRepository implements JobRepositoryEx
             dto.setQtyPerson(rs.getInt("qty_person"));
             dto.setViews(rs.getInt("views"));
             dto.setId(rs.getLong("id"));
+            dto.setReason(rs.getString("reason"));
 
             User user = new User();
             user.setId(rs.getLong("create_id"));

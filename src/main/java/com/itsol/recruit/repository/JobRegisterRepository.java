@@ -12,11 +12,11 @@ import java.util.List;
 
 @Repository
 public interface JobRegisterRepository extends JpaRepository<JobRegister, Long> {
-    @Query(value = "select u from job_register u where u.user.name like :name and u.statusJobRegister.id = :status_id order by u.dateRegister DESC ")
+    @Query(value = "select u from job_register u where lower(u.user.name)  like :name and u.statusJobRegister.id = :status_id order by u.dateRegister DESC ")
     Page<JobRegister> find(@Param("name") String name, @Param("status_id") Long statusId,
                   Pageable pageable);
 
-    @Query(value = "select u from job_register u where u.user.name like :name and u.statusJobRegister.id = :status_id order by u.user.name DESC ")
+    @Query(value = "select u from job_register u where lower(u.user.name)  like :name and u.statusJobRegister.id = :status_id order by u.user.name DESC ")
     Page<JobRegister> sortByName(@Param("name") String name, @Param("status_id") Long statusId,
                            Pageable pageable);
 

@@ -3,6 +3,7 @@ package com.itsol.recruit.web.rest;
 import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.dto.JobDTO;
 import com.itsol.recruit.dto.JobPaginationDto;
+import com.itsol.recruit.dto.ReasonDto;
 import com.itsol.recruit.dto.StatusDto;
 import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.service.JobService;
@@ -78,5 +79,10 @@ public class JobController {
     @PutMapping("/status_job")
     public ResponseEntity<Job> updateStatusJob(@RequestBody StatusDto statusDto) {
         return ResponseEntity.ok().body(jobService.updateStatus(statusDto));
+    }
+
+    @PutMapping("/reason")
+    public ResponseEntity<Job> updateReason(@RequestBody ReasonDto reasonDto) {
+        return ResponseEntity.ok().body(jobService.updateReason(reasonDto));
     }
 }

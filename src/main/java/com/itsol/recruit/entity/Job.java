@@ -99,6 +99,9 @@ public class Job {
     @Column(name = "views")
     Integer views;
 
+    @Column(name = "reason")
+    String reason = "";
+
     @Column(name = "isDelete ")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     boolean isDelete ;

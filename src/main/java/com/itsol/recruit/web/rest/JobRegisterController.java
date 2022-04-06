@@ -8,14 +8,18 @@ import com.itsol.recruit.entity.JobRegister;
 import com.itsol.recruit.entity.Profiles;
 import com.itsol.recruit.service.JobRegisterService;
 import com.itsol.recruit.service.ProfileService;
+import com.itsol.recruit.web.vm.ResponseMessage;
 import com.itsol.recruit.web.vm.SearchJobRegisterVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 @RestController
@@ -66,9 +70,12 @@ public class JobRegisterController {
     @CrossOrigin
     public ResponseEntity<Resource> downloadApplicantCv(@PathVariable("id") Long id) throws Exception {
         Resource resource = jobRegisterService.downloadCv(id);
-        String contentType="application/pdf";
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+        Path path = resource.getFile()
+                .toPath();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(path))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
+
 }

@@ -48,6 +48,7 @@ public class User{
     @Column(name = "birth_day")
     Date birthDay;
 
+
     @Column(name = "is_delete")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     boolean isDelete;

@@ -1,10 +1,12 @@
 package com.itsol.recruit.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 @Entity(name = "job_register")
@@ -15,7 +17,7 @@ import java.util.Date;
 public class JobRegister{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GEN_JOR_ID")
-    @SequenceGenerator(name = "GEN_JOR_ID", sequenceName = "JOBREG_SEQ", allocationSize = 1,initialValue = 1)
+    @SequenceGenerator(name = "GEN_JOR_ID", sequenceName = "JOBREG_SEQ", allocationSize = 1)
     private Long id;
 
     @ManyToOne

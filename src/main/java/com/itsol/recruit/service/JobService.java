@@ -2,6 +2,7 @@ package com.itsol.recruit.service;
 
 import com.itsol.recruit.dto.JobDTO;
 import com.itsol.recruit.dto.JobPaginationDto;
+import com.itsol.recruit.dto.ReasonDto;
 import com.itsol.recruit.dto.StatusDto;
 import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.web.vm.SearchJobVM;
@@ -27,4 +28,6 @@ public interface JobService {
     JobPaginationDto getJobDue(Integer numberDay, int pageNumber, int pageSize);
 
     Job updateStatus(StatusDto statusDto);
+
+    Job updateReason(ReasonDto reasonDto);
 }

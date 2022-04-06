@@ -3,7 +3,6 @@ package com.itsol.recruit.service;
 import com.itsol.recruit.dto.JobRegisterPaginationDto;
 import com.itsol.recruit.dto.ScheduleDto;
 import com.itsol.recruit.dto.StatusRegisterDto;
-import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.entity.JobRegister;
 import com.itsol.recruit.web.vm.SearchJobRegisterVM;
 import org.springframework.core.io.Resource;

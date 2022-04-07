@@ -23,6 +23,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PostMapping(value = "/user")
+    public ResponseEntity<User> add(@RequestBody User user){
+        return ResponseEntity.ok().body( userService.save(user));
+    }
+
     @GetMapping(value = "/user")
     public ResponseEntity<List<User>> getAllUser(){
         return  ResponseEntity.ok().body( userService.getAllUser());
@@ -43,7 +48,7 @@ public class UserController {
         return  ResponseEntity.ok().body( userService.findUserByRole(role));
     }
 
-    @PostMapping(value="/user")
+    @PutMapping(value="/user")
   public ResponseEntity<MessageDto> updateUser(@RequestBody User user){
     return ResponseEntity.ok().body(userService.updateUser(user));}
 

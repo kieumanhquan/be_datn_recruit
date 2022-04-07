@@ -21,6 +21,8 @@ public interface UserService {
 
     List<User> findUserByRole(String role);
 
+    User save(User user);
+
     MessageDto updateUser(User user);
 
     UserPaginationDto find(SearchUserVM searchUserVM, int pageNumber, int pageSize);

@@ -12,14 +12,11 @@ import com.itsol.recruit.service.JobService;
 import com.itsol.recruit.service.mapper.JobMapper;
 import com.itsol.recruit.web.vm.SearchJobVM;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class JobServiceImpl implements JobService {
@@ -37,36 +34,14 @@ public class JobServiceImpl implements JobService {
     private StatusJobRepository statusJobRepository;
 
 
-//    @Override
-//    public JobPaginationDto find(SearchJobVM searchJobVM, int pageNumber, int pageSize) {
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-//        JobPaginationDto jobPaginationDto = new JobPaginationDto();
-//        jobPaginationDto.setList(jobRepository.find("%" + searchJobVM.getName().toLowerCase() + "%",
-//                searchJobVM.getStatusId(), searchJobVM.getSalaryMin(), searchJobVM.getSalaryMax(),
-//                pageable).stream().collect(Collectors.toList()));
-//
-//        jobPaginationDto.setTotalPage((long) jobRepository.find("%" + searchJobVM.getName().toLowerCase() + "%",
-//                searchJobVM.getStatusId(), searchJobVM.getSalaryMin(),
-//                searchJobVM.getSalaryMax(), pageable).getTotalPages());
-//        return jobPaginationDto;
-//    }
-//
     @Override
     public JobPaginationDto find(SearchJobVM searchJobVM, int pageNumber, int pageSize) {
-        return jobRepositoryExt.search(searchJobVM,pageNumber,pageSize);
+        return jobRepositoryExt.search(searchJobVM,"due_date",pageNumber,pageSize);
     }
 
     @Override
     public JobPaginationDto sortByName(SearchJobVM searchJobVM, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        JobPaginationDto jobPaginationDto = new JobPaginationDto();
-        jobPaginationDto.setList(jobRepository.sortByName("%" + searchJobVM.getName().toLowerCase() + "%",
-                searchJobVM.getStatusId(), searchJobVM.getSalaryMin(), searchJobVM.getSalaryMax(),
-                pageable).stream().collect(Collectors.toList()));
-        jobPaginationDto.setTotalPage((long) jobRepository.sortByName("%" + searchJobVM.getName().toLowerCase() + "%",
-                searchJobVM.getStatusId(), searchJobVM.getSalaryMin(), searchJobVM.getSalaryMax(),
-                pageable).getTotalPages());
-        return jobPaginationDto;
+        return jobRepositoryExt.search(searchJobVM,"name",pageNumber,pageSize);
     }
 
     @Override
@@ -79,7 +54,6 @@ public class JobServiceImpl implements JobService {
             Job job = jobMapper.toEntity(jobDTO, jobExits);
             return jobRepository.save(job);
         }
-
     }
 
     @Override
@@ -94,8 +68,6 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobPaginationDto getNewJob(Integer numberDay, int pageNumber, int pageSize){
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        JobPaginationDto jobPaginationDto = new JobPaginationDto();
 
         Date dt = new Date();
         Calendar c = Calendar.getInstance();
@@ -103,34 +75,23 @@ public class JobServiceImpl implements JobService {
         c.add(Calendar.DATE, -numberDay);
         dt = c.getTime();
 
-        jobPaginationDto.setList(jobRepository.getJobNew(dt,pageable).stream().collect(Collectors.toList()));
-        jobPaginationDto.setTotalPage((long) jobRepository.getJobNew(dt,pageable).getTotalPages());
-        return jobPaginationDto;
+        return jobRepositoryExt.getNewJob(dt,pageNumber,pageSize);
     }
 
     @Override
     public JobPaginationDto getJobHighSalary(Integer salary, int pageNumber, int pageSize){
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        JobPaginationDto jobPaginationDto = new JobPaginationDto();
-        jobPaginationDto.setList(jobRepository.getJobHighSalary(salary,pageable).stream().collect(Collectors.toList()));
-        jobPaginationDto.setTotalPage((long) jobRepository.getJobHighSalary(salary,pageable).getTotalPages());
-        return jobPaginationDto;
+        return jobRepositoryExt.getJobHighSalary(salary,pageNumber,pageSize);
     }
 
     @Override
     public JobPaginationDto getJobDue(Integer numberDay, int pageNumber, int pageSize){
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        JobPaginationDto jobPaginationDto = new JobPaginationDto();
-
         Date dt = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(dt);
         c.add(Calendar.DATE, numberDay);
         dt = c.getTime();
 
-        jobPaginationDto.setList(jobRepository.getJobDue(dt,pageable).stream().collect(Collectors.toList()));
-        jobPaginationDto.setTotalPage((long) jobRepository.getJobDue(dt,pageable).getTotalPages());
-        return jobPaginationDto;
+        return jobRepositoryExt.getJobDue(dt,pageNumber,pageSize);
     }
 
     @Override
@@ -147,4 +108,12 @@ public class JobServiceImpl implements JobService {
         job.setReason(reasonDto.getReason());
         return jobRepository.save(job);
     }
+
+
+    @Override
+    public void delete(long id){
+        jobRepository.deleteById(id);
+    }
+
+
 }

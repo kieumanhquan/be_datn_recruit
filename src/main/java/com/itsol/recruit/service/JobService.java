@@ -30,4 +30,6 @@ public interface JobService {
     Job updateStatus(StatusDto statusDto);
 
     Job updateReason(ReasonDto reasonDto);
+
+    void delete(long id);
 }

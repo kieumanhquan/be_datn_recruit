@@ -7,6 +7,7 @@ import com.itsol.recruit.entity.JobRegister;
 import com.itsol.recruit.entity.User;
 import com.itsol.recruit.repository.JobRegisterRepository;
 import com.itsol.recruit.repository.StatusJobRegisterRepository;
+import com.itsol.recruit.repository.repoext.JobRegisterRepositoryExt;
 import com.itsol.recruit.service.JobRegisterService;
 import com.itsol.recruit.service.email.EmailService;
 import com.itsol.recruit.web.vm.SearchJobRegisterVM;
@@ -36,23 +37,18 @@ public class JobRegisterServiceImpl implements JobRegisterService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private JobRegisterRepositoryExt jobRegisterRepositoryExt;
+
 
     @Override
     public JobRegisterPaginationDto find(SearchJobRegisterVM searchJobRegisterVM, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber,pageSize);
-        JobRegisterPaginationDto jobRegisterPaginationDto =  new JobRegisterPaginationDto();
-        jobRegisterPaginationDto.setList(jobRegisterRepository.find("%"+searchJobRegisterVM.getName().toLowerCase()+"%", searchJobRegisterVM.getStatusRegisterId(), pageable).stream().collect(Collectors.toList()));
-        jobRegisterPaginationDto.setTotalPage((long) jobRegisterRepository.find("%"+searchJobRegisterVM.getName().toLowerCase()+"%", searchJobRegisterVM.getStatusRegisterId(), pageable).getTotalPages());
-        return jobRegisterPaginationDto;
+        return jobRegisterRepositoryExt.search(searchJobRegisterVM,"job_register.date_register",pageNumber,pageSize);
     }
 
     @Override
     public JobRegisterPaginationDto sortByName(SearchJobRegisterVM searchJobRegisterVM, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber,pageSize);
-        JobRegisterPaginationDto jobRegisterPaginationDto =  new JobRegisterPaginationDto();
-        jobRegisterPaginationDto.setList(jobRegisterRepository.sortByName("%"+searchJobRegisterVM.getName().toLowerCase()+"%", searchJobRegisterVM.getStatusRegisterId(), pageable).stream().collect(Collectors.toList()));
-        jobRegisterPaginationDto.setTotalPage((long) jobRegisterRepository.sortByName("%"+searchJobRegisterVM.getName().toLowerCase()+"%", searchJobRegisterVM.getStatusRegisterId(), pageable).getTotalPages());
-        return jobRegisterPaginationDto;
+        return jobRegisterRepositoryExt.search(searchJobRegisterVM,"users.name",pageNumber,pageSize);
     }
 
     @Override

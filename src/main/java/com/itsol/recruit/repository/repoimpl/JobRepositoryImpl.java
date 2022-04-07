@@ -14,9 +14,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 @Slf4j
@@ -40,8 +38,10 @@ public class JobRepositoryImpl extends BaseRepository implements JobRepositoryEx
     @Autowired
     private WorkingFormRepository workingFormRepository;
 
+    private static long totalPage = 0;
+
     @Override
-    public JobPaginationDto search(SearchJobVM searchJobVM, Integer pageNumber, Integer pageSize) {
+    public JobPaginationDto search(SearchJobVM searchJobVM, String orderName, Integer pageNumber, Integer pageSize) {
         try{
             String query = SqlReader.getSqlQueryById(SqlReader.ADMIN_MODULE_JOB, "searchJob");
             Map<String, Object> parameters = new HashMap<>();
@@ -75,19 +75,20 @@ public class JobRepositoryImpl extends BaseRepository implements JobRepositoryEx
                 p_endrow=p_startrow+pageSize-1;
             }
 
-            query += " order by job.create_date DESC ),count_all as( select count (*) total from tempselect )," +
+            query += " order by job."+orderName+" DESC ),count_all as( select count (*) total from tempselect )," +
                     " paging as( select * from tempselect  where ROWNR between :p_startrow and :p_endrow " +
                     ") select p.*, c.total from paging p, count_all c ";
             parameters.put("p_startrow", p_startrow);
             parameters.put("p_endrow", p_endrow);
             JobPaginationDto jobPaginationDto = new JobPaginationDto();
-            if(getNamedParameterJdbcTemplate().query(query, parameters, new JobMapper()).isEmpty()){
+            List<Job> listJob = getNamedParameterJdbcTemplate().query(query, parameters, new JobMapper());
+            if(listJob.isEmpty()){
                 jobPaginationDto.setList(new ArrayList<>());
                 jobPaginationDto.setTotalPage(0L);
             }
             else {
-                jobPaginationDto.setList(getNamedParameterJdbcTemplate().query(query, parameters, new JobMapper()));
-                jobPaginationDto.setTotalPage(getNamedParameterJdbcTemplate().query(query, parameters, new totalMap()).get(0));
+                jobPaginationDto.setList(listJob);
+                jobPaginationDto.setTotalPage(totalPage);
             }
 
             return jobPaginationDto;
@@ -97,6 +98,139 @@ public class JobRepositoryImpl extends BaseRepository implements JobRepositoryEx
         }
         return null;
     }
+
+
+    @Override
+    public JobPaginationDto getNewJob(Date numberDate, Integer pageNumber, Integer pageSize) {
+        try{
+            String query = SqlReader.getSqlQueryById(SqlReader.ADMIN_MODULE_JOB, "searchJob");
+            Map<String, Object> parameters = new HashMap<>();
+            if (!ObjectUtils.isEmpty(numberDate)) {
+                query += " and job.create_date > :p_number_date";
+                parameters.put("p_number_date",numberDate);
+            }
+
+            Integer p_startrow;
+            Integer p_endrow;
+            if(pageNumber==0)
+            {
+                p_startrow=0;
+                p_endrow=p_startrow+pageSize;
+            }
+            else {
+                p_startrow=pageSize*pageNumber+1;
+                p_endrow=p_startrow+pageSize-1;
+            }
+
+            query += " and job.status_id = 2 order by job.create_date DESC ),count_all as( select count (*) total from tempselect )," +
+                    " paging as( select * from tempselect  where ROWNR between :p_startrow and :p_endrow " +
+                    ") select p.*, c.total from paging p, count_all c ";
+            parameters.put("p_startrow", p_startrow);
+            parameters.put("p_endrow", p_endrow);
+            JobPaginationDto jobPaginationDto = new JobPaginationDto();
+            List<Job> listJob = getNamedParameterJdbcTemplate().query(query, parameters, new JobMapper());
+            if(listJob.isEmpty()){
+                jobPaginationDto.setList(new ArrayList<>());
+                jobPaginationDto.setTotalPage(0L);
+            }
+            else {
+                jobPaginationDto.setList(listJob);
+                jobPaginationDto.setTotalPage(totalPage);
+            }
+
+            return jobPaginationDto;
+        }
+        catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
+        return null;
+    }
+
+    @Override
+    public JobPaginationDto getJobHighSalary(Integer salary, Integer pageNumber, Integer pageSize) {
+        try{
+            String query = SqlReader.getSqlQueryById(SqlReader.ADMIN_MODULE_JOB, "searchJob");
+            Map<String, Object> parameters = new HashMap<>();
+            if (!ObjectUtils.isEmpty(salary)) {
+                query += " and job.salary_max > :p_salary";
+                parameters.put("p_salary",salary);
+            }
+
+            Integer p_startrow;
+            Integer p_endrow;
+            if(pageNumber==0)
+            {
+                p_startrow=0;
+                p_endrow=p_startrow+pageSize;
+            }
+            else {
+                p_startrow=pageSize*pageNumber+1;
+                p_endrow=p_startrow+pageSize-1;
+            }
+
+            query += " and job.status_id = 2 order by job.create_date DESC ),count_all as( select count (*) total from tempselect )," +
+                    " paging as( select * from tempselect  where ROWNR between :p_startrow and :p_endrow " +
+                    ") select p.*, c.total from paging p, count_all c ";
+            parameters.put("p_startrow", p_startrow);
+            parameters.put("p_endrow", p_endrow);
+            JobPaginationDto jobPaginationDto = new JobPaginationDto();
+            List<Job> listJob = getNamedParameterJdbcTemplate().query(query, parameters, new JobMapper());
+            if(listJob.isEmpty()){
+                jobPaginationDto.setList(new ArrayList<>());
+                jobPaginationDto.setTotalPage(0L);
+            }
+            else {
+                jobPaginationDto.setList(listJob);
+                jobPaginationDto.setTotalPage(totalPage);
+            }
+
+            return jobPaginationDto;
+        }
+        catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
+        return null;
+    }
+
+    @Override
+    public JobPaginationDto getJobDue(Date numberDate, Integer pageNumber, Integer pageSize) {
+        try{
+            String query = SqlReader.getSqlQueryById(SqlReader.ADMIN_MODULE_JOB, "dueDate");
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("p_number_date",numberDate);
+            Integer p_startrow;
+            Integer p_endrow;
+            if(pageNumber==0)
+            {
+                p_startrow=0;
+                p_endrow=p_startrow+pageSize;
+            }
+            else {
+                p_startrow=pageSize*pageNumber+1;
+                p_endrow=p_startrow+pageSize-1;
+            }
+
+            parameters.put("p_startrow", p_startrow);
+            parameters.put("p_endrow", p_endrow);
+            JobPaginationDto jobPaginationDto = new JobPaginationDto();
+            List<Job> listJob = getNamedParameterJdbcTemplate().query(query, parameters, new JobMapper());
+            if(listJob.isEmpty()){
+                jobPaginationDto.setList(new ArrayList<>());
+                jobPaginationDto.setTotalPage(0L);
+            }
+            else {
+                jobPaginationDto.setList(listJob);
+                jobPaginationDto.setTotalPage(totalPage);
+            }
+
+            return jobPaginationDto;
+        }
+        catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
+        return null;
+    }
+
 
     class JobMapper implements RowMapper<Job> {
 
@@ -153,16 +287,10 @@ public class JobRepositoryImpl extends BaseRepository implements JobRepositoryEx
             StatusJob newStatusJob = statusJobRepository.findById(statusJob.getId()).get();
             dto.setStatusJob(newStatusJob);
 
+            totalPage = rs.getLong("total");
+
             return dto;
         }
     }
 
-    class totalMap implements RowMapper<Long> {
-
-        @Override
-        public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
-            long total = rs.getLong("total");
-            return total;
-        }
-    }
 }

@@ -69,7 +69,7 @@ public class UploadServiceImpl implements UploadService {
             }
             String fileName = file.getOriginalFilename();
             Files.copy(file.getInputStream(), this.root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
-            file.transferTo(new File("C:\\Users\\hieul\\Downloads\\"+fileName));
+            file.transferTo(new File("D:\\upFile\\"+fileName));
             // Save to job register
             registerJobForUser(user, fileName, jobId);
 

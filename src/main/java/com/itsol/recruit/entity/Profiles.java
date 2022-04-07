@@ -34,6 +34,9 @@ public class Profiles implements Serializable {
     @Column(name = "number_years_experience", nullable = false)
     private Integer numberYearsExperience;
 
+    @Column(name = "description")
+    private String description;
+
     @OneToOne
     @JoinColumn(name ="academic_name_id")
     private AcademicLevel academicLevel;

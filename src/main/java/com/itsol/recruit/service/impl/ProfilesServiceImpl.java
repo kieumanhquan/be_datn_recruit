@@ -23,7 +23,11 @@ public class ProfilesServiceImpl implements ProfilesService {
 
     @Override
     public Profiles getProfileByUserId(Long id){
-        return profilesRepository.findOneByUser(userRepository.findOneById(id));
+        Profiles profiles=profilesRepository.findOneByUser(userRepository.findOneById(id));
+        if(profiles==null){
+            return new Profiles(userRepository.findOneById(id));
+        }else{
+        return profiles;}
     }
 
 

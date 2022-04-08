@@ -49,7 +49,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
-      /*  Role role=new Role();
+   /*     Role role=new Role();
         role.setId(1L);
         role.setCode(Constants.Role.ADMIN);
         roleRepository.save(role);

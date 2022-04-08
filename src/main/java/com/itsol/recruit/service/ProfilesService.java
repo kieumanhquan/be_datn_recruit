@@ -6,4 +6,6 @@ public interface ProfilesService {
     Profiles save(Profiles profiles);
 
     Profiles getProfileByUserId(Long id);
+
+
 }

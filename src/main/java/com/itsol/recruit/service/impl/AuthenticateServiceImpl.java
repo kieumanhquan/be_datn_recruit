@@ -4,12 +4,10 @@ import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.dto.MessageDto;
 import com.itsol.recruit.dto.UserDTO;
 import com.itsol.recruit.entity.OTP;
+import com.itsol.recruit.entity.Profiles;
 import com.itsol.recruit.entity.Role;
 import com.itsol.recruit.entity.User;
-import com.itsol.recruit.repository.AuthenticateRepository;
-import com.itsol.recruit.repository.OtpRepository;
-import com.itsol.recruit.repository.RoleRepository;
-import com.itsol.recruit.repository.UserRepository;
+import com.itsol.recruit.repository.*;
 import com.itsol.recruit.service.AuthenticateService;
 import com.itsol.recruit.service.email.EmailService;
 import com.itsol.recruit.service.mapper.UserMapper;
@@ -37,8 +35,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 
     public final EmailService emailService;
 
-
-
+    public final ProfilesRepository profilesRepository;
 
     @Autowired
      OtpRepository otpRepository;
@@ -46,12 +43,13 @@ public class AuthenticateServiceImpl implements AuthenticateService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public AuthenticateServiceImpl(AuthenticateRepository authenticateRepository, UserMapper userMapper, RoleRepository roleRepository, UserRepository userRepository, EmailService emailService) {
+    public AuthenticateServiceImpl(AuthenticateRepository authenticateRepository, UserMapper userMapper, RoleRepository roleRepository, UserRepository userRepository, EmailService emailService,ProfilesRepository profilesRepository) {
         this.authenticateRepository = authenticateRepository;
         this.userMapper = userMapper;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.emailService =emailService;
+        this.profilesRepository=profilesRepository;
     }
 
     @Override
@@ -60,6 +58,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
             try{
                 Set<Role> roles = roleRepository.findByCode(Constants.Role.USER);
                 User user = userMapper.toEntity(dto);
+                Profiles profiles=new Profiles();
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setActive(false);
                 user.setRoles(roles);
@@ -81,6 +80,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
         boolean obj=false;
         String message="";
         try{
+            System.out.println("email change pass word: " +dto.getPassword());
             Optional<User> user= userRepository.findOneByEmail(dto.getEmail());
             if(user.isPresent()){
                 OTP dbOtp= otpRepository.findByUser(user.get());

@@ -8,7 +8,7 @@ import com.itsol.recruit.entity.AcademicLevel;
 import com.itsol.recruit.entity.Profiles;
 import com.itsol.recruit.entity.User;
 import com.itsol.recruit.service.AcademicLevelService;
-import com.itsol.recruit.service.ProfileService;
+import com.itsol.recruit.service.ProfilesService;
 import com.itsol.recruit.service.UserService;
 import com.itsol.recruit.web.vm.SearchUserVM;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +22,13 @@ public class UserController {
 
    public final UserService userService ;
 
-   public final ProfileService profileService;
+   public final ProfilesService profilesService;
 
    public final AcademicLevelService academicLevelService;
 
-    public UserController(UserService userService, ProfileService profileService, AcademicLevelService academicLevelService) {
+    public UserController(UserService userService, ProfilesService profilesService, AcademicLevelService academicLevelService) {
         this.userService = userService;
-        this.profileService=profileService;
+        this.profilesService=profilesService;
         this.academicLevelService=academicLevelService;
     }
 
@@ -53,7 +53,7 @@ public class UserController {
 
     @GetMapping(value = "/user/profiles={id}")
     public ResponseEntity<Profiles> findProfilesByUserId(@PathVariable Long id){
-        return  ResponseEntity.ok().body( profileService.getProfileByUserId(id));
+        return  ResponseEntity.ok().body( profilesService.getProfileByUserId(id));
     }
 
     @GetMapping(value = "/user/username={username}")

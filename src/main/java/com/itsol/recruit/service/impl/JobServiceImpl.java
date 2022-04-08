@@ -115,5 +115,11 @@ public class JobServiceImpl implements JobService {
         jobRepository.deleteById(id);
     }
 
+    @Override
+    public void addView(long id){
+        Job job = jobRepository.findOneById(id);
+        job.setViews(job.getViews()+1);
+        jobRepository.save(job);
+    }
 
 }

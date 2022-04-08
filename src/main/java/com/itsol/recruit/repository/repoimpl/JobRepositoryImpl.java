@@ -62,6 +62,16 @@ public class JobRepositoryImpl extends BaseRepository implements JobRepositoryEx
                 query += " and job.salary_min > :p_salary_min";
                 parameters.put("p_salary_min",searchJobVM.getSalaryMin());
             }
+            if (!ObjectUtils.isEmpty(searchJobVM.getAddressWork())) {
+                String address=searchJobVM.getAddressWork().toUpperCase();
+                query += " and UPPER(job.address_work) like :p_address_word";
+                parameters.put("p_address_word","%"+address+"%");
+            }
+            if (!ObjectUtils.isEmpty(searchJobVM.getSkills())) {
+                String skills=searchJobVM.getSkills().toUpperCase();
+                query += " and UPPER(job.skills) like :p_skills";
+                parameters.put("p_skills","%"+skills+"%");
+            }
 
             Integer p_startrow;
             Integer p_endrow;

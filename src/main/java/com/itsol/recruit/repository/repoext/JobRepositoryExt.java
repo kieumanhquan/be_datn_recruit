@@ -8,7 +8,6 @@ import java.util.Date;
 public interface JobRepositoryExt {
     JobPaginationDto search(SearchJobVM searchJobVM,String orderName, Integer pageNumber, Integer pageSize);
 
-
     JobPaginationDto getNewJob(Date numberDate, Integer pageNumber, Integer pageSize);
 
     JobPaginationDto getJobHighSalary(Integer salary, Integer pageNumber, Integer pageSize);

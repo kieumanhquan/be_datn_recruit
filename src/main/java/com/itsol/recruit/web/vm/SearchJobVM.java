@@ -11,4 +11,8 @@ public class SearchJobVM {
     private Integer salaryMin;
 
     private Integer salaryMax;
+
+    private String addressWork;
+
+    private String skills;
 }

@@ -90,4 +90,9 @@ public class JobController {
     public void delete(@PathVariable("id") Long id) {
         jobService.delete(id);
     }
+
+    @GetMapping("/views/id={id}")
+    public void addViews(@PathVariable("id") Long id) {
+        jobService.addView(id);
+    }
 }

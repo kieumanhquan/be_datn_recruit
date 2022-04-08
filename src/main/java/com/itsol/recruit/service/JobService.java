@@ -32,4 +32,6 @@ public interface JobService {
     Job updateReason(ReasonDto reasonDto);
 
     void delete(long id);
+
+    void addView(long id);
 }

@@ -56,9 +56,9 @@ public class UserController {
         return  ResponseEntity.ok().body( profilesService.getProfileByUserId(id));
     }
 
-    @GetMapping(value = "/username/{name}")
-    public ResponseEntity<User> findUserByUserName(@PathVariable String name){
-        return  ResponseEntity.ok().body( userService.findUserByUserName(name));
+    @GetMapping(value = "/username={username}")
+    public ResponseEntity<User> findUserByUserName(@PathVariable String username){
+        return  ResponseEntity.ok().body( userService.findUserByUserName(username));
     }
 
 
@@ -73,7 +73,7 @@ public class UserController {
 
 
 
-    @PostMapping("/searches")
+    @PostMapping("user/searches")
     public UserPaginationDto find(@RequestBody SearchUserVM searchUserVM, @RequestParam(name = "page") int pageNumber,
                                   @RequestParam(name = "size") int pageSize) {
         return userService.find(searchUserVM, pageNumber, pageSize);

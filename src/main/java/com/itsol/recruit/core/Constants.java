@@ -51,6 +51,7 @@ public final class Constants {
 
             public static final String PUBLIC = PREFIX + "/public";
             public static final String ADMIN = PREFIX + "/admin";
+            public static final String USER = PREFIX + "/user";
             public static final String JE = PREFIX + "/je";
             public static final String AUTH = PREFIX + "/auth";
             public static final String ACCOUNT = PREFIX + "/account";

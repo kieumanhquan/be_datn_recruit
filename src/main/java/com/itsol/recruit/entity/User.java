@@ -46,8 +46,7 @@ public class User{
     String gender;
 
     @Column(name = "birth_day")
-    Date birthDay;
-
+    Date birthday;
 
     @Column(name = "is_delete")
     @Type(type = "org.hibernate.type.NumericBooleanType")

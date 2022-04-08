@@ -18,6 +18,10 @@ import java.io.Serializable;
 
 public class Profiles implements Serializable {
 
+    public Profiles(User user) {
+        this.user = user;
+    }
+
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROFILES_SEQ")

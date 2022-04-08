@@ -2,9 +2,12 @@ package com.itsol.recruit.service.impl;
 
 import com.itsol.recruit.dto.JobPaginationDto;
 import com.itsol.recruit.dto.MessageDto;
+import com.itsol.recruit.dto.UserAndProfilesDto;
 import com.itsol.recruit.dto.UserPaginationDto;
+import com.itsol.recruit.entity.Profiles;
 import com.itsol.recruit.entity.Role;
 import com.itsol.recruit.entity.User;
+import com.itsol.recruit.repository.ProfilesRepository;
 import com.itsol.recruit.repository.RoleRepository;
 import com.itsol.recruit.repository.UserRepository;
 import com.itsol.recruit.service.UserService;
@@ -28,9 +31,12 @@ public class UserServiceImpl implements UserService {
 
     public final RoleRepository roleRepository;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public final ProfilesRepository profilesRepository;
+
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,ProfilesRepository profilesRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.profilesRepository=profilesRepository;
     }
 
     @Override
@@ -97,5 +103,36 @@ public class UserServiceImpl implements UserService {
                 "%"+searchUserVM.getPhoneNumber()+"%","%"+ searchUserVM.getEmail() +"%",
                 pageable).getTotalPages());
         return userPaginationDto;
+    }
+
+    @Override
+    public UserAndProfilesDto findUserProfilesByUserName(String userName) {
+        UserAndProfilesDto userAndProfilesDto=new UserAndProfilesDto();
+       User user= userRepository.findByUserName(userName).get();
+        userAndProfilesDto.setUser(user);
+       if(profilesRepository.findOneByUser(user)==null){
+           Profiles profile= new Profiles();
+           profile.setUser(user);
+           userAndProfilesDto.setProfiles(profile);
+       }else{
+           userAndProfilesDto.setProfiles(profilesRepository.findOneByUser(user));
+       }
+        return userAndProfilesDto;
+    }
+
+    @Override
+    public MessageDto updateUserProfiles(UserAndProfilesDto userAndProfilesDto) {
+        MessageDto message=new MessageDto();
+        try{
+
+            userRepository.save(userAndProfilesDto.getUser());
+            profilesRepository.save(userAndProfilesDto.getProfiles());
+            message.setObj(true);
+            message.setMessage("Cập nhật thành công");
+        }catch(Exception e){
+            message.setObj(false);
+            message.setMessage("Cập nhật thất bại");
+        }
+        return message;
     }
 }

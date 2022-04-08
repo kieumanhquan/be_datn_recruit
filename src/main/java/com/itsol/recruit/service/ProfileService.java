@@ -4,4 +4,6 @@ import com.itsol.recruit.entity.Profiles;
 
 public interface ProfileService {
     Profiles getProfileByUserId(Long id);
+
+
 }

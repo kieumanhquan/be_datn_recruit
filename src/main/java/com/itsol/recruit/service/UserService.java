@@ -2,6 +2,7 @@ package com.itsol.recruit.service;
 
 import com.itsol.recruit.dto.JobPaginationDto;
 import com.itsol.recruit.dto.MessageDto;
+import com.itsol.recruit.dto.UserAndProfilesDto;
 import com.itsol.recruit.dto.UserPaginationDto;
 import com.itsol.recruit.entity.User;
 import com.itsol.recruit.web.vm.SearchJobVM;
@@ -24,4 +25,8 @@ public interface UserService {
     MessageDto updateUser(User user);
 
     UserPaginationDto find(SearchUserVM searchUserVM, int pageNumber, int pageSize);
+
+    UserAndProfilesDto findUserProfilesByUserName(String username);
+
+    MessageDto updateUserProfiles(UserAndProfilesDto userAndProfilesDto);
 }

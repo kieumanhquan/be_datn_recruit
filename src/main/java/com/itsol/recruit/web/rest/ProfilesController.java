@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = Constants.Api.Path.PUBLIC)
+@RequestMapping(value = Constants.Api.Path.USER)
 public class ProfilesController {
 
     @Autowired
@@ -16,6 +16,7 @@ public class ProfilesController {
 
     @PostMapping(value = "/profiles")
     public ResponseEntity<Profiles> add(@RequestBody Profiles profiles){
+        System.out.println(profiles.toString());
         return ResponseEntity.ok().body( profilesService.save(profiles));
     }
 

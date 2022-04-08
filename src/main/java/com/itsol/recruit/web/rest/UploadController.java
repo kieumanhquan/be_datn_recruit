@@ -40,7 +40,7 @@ public class UploadController {
         }
     }
 
-    @PostMapping("/uploadAvatar")
+    @PostMapping("/uploadAvatar")// up avata
     public ResponseEntity<ResponseMessage> uploadAvatar(@RequestParam("file") MultipartFile file
             , @RequestParam("userId") Long userId ) {
         String message;

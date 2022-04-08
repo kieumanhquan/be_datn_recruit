@@ -75,6 +75,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User save(User user){
+        return userRepository.save(user);
+    }
+
+    @Override
     public MessageDto updateUser(User user) {
         MessageDto message=new MessageDto();
         if(userRepository.findByUserName(user.getUserName()).isPresent()){

@@ -85,4 +85,9 @@ public class JobController {
     public ResponseEntity<Job> updateReason(@RequestBody ReasonDto reasonDto) {
         return ResponseEntity.ok().body(jobService.updateReason(reasonDto));
     }
+
+    @DeleteMapping("/id={id}")
+    public void delete(@PathVariable("id") Long id) {
+        jobService.delete(id);
+    }
 }

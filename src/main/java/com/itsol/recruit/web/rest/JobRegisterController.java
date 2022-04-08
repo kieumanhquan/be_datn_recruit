@@ -5,18 +5,13 @@ import com.itsol.recruit.dto.JobRegisterPaginationDto;
 import com.itsol.recruit.dto.ScheduleDto;
 import com.itsol.recruit.dto.StatusRegisterDto;
 import com.itsol.recruit.entity.JobRegister;
-import com.itsol.recruit.entity.Profiles;
 import com.itsol.recruit.service.JobRegisterService;
-import com.itsol.recruit.service.ProfileService;
-import com.itsol.recruit.web.vm.ResponseMessage;
 import com.itsol.recruit.web.vm.SearchJobRegisterVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,9 +22,6 @@ import java.util.List;
 public class JobRegisterController {
     @Autowired
     private JobRegisterService jobRegisterService;
-
-    @Autowired
-    private ProfileService profileService;
 
     @PostMapping("/searches")
     public JobRegisterPaginationDto find(@RequestBody SearchJobRegisterVM searchJobRegisterVM,@RequestParam(name = "page") int pageNumber, @RequestParam(name = "size") int pageSize) {
@@ -46,10 +38,6 @@ public class JobRegisterController {
         return ResponseEntity.ok().body(jobRegisterService.getById(id));
     }
 
-    @GetMapping("/profiles/id={id}")
-    public ResponseEntity<Profiles> getProfileByUserId(@PathVariable("id") Long id) {
-        return ResponseEntity.ok().body(profileService.getProfileByUserId(id));
-    }
 
     @GetMapping("/jobId={id}")
     public ResponseEntity<List<JobRegister>> getByJobId(@PathVariable("id") Long id) {

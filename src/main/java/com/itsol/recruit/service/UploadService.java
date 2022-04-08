@@ -12,6 +12,8 @@ public interface  UploadService {
 
     void save(String username, MultipartFile file, Long jobId);
 
+    void saveAvatar(MultipartFile file, Long userId);
+
     Resource load(String filename);
 
     void deleteAll();

@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
 public class ProfilesController {
 
     @Autowired
-    private ProfilesService profilesServicel;
+    private ProfilesService profilesService;
 
     @PostMapping(value = "/profiles")
     public ResponseEntity<Profiles> add(@RequestBody Profiles profiles){
-        return ResponseEntity.ok().body( profilesServicel.save(profiles));
+        return ResponseEntity.ok().body( profilesService.save(profiles));
     }
 
-    @PutMapping(value = "/profiles")
-    public ResponseEntity<Profiles> update(@RequestBody Profiles profiles){
-        return ResponseEntity.ok().body( profilesServicel.save(profiles));
+    @GetMapping("/profiles/id={id}")
+    public ResponseEntity<Profiles> getProfileByUserId(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(profilesService.getProfileByUserId(id));
     }
 }

@@ -40,6 +40,22 @@ public class UploadController {
         }
     }
 
+    @PostMapping("/uploadAvatar")
+    public ResponseEntity<ResponseMessage> uploadAvatar(@RequestParam("file") MultipartFile file
+            , @RequestParam("userId") Long userId ) {
+        String message;
+        try {
+            uploadCVService.saveAvatar( file, userId);
+            message = "Uploaded avatarName successfully: " + file.getOriginalFilename();
+            ResponseMessage responseMessage = new ResponseMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            message = "Could not upload and register job the file: " + file.getOriginalFilename() + "!";
+            ResponseMessage responseMessage = new ResponseMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseMessage);
+        }
+    }
+
     @GetMapping("/files")
     public ResponseEntity<List<FileInfo>> getListFiles() {
         List<FileInfo> fileInfos = uploadCVService.loadAll().map(path -> {

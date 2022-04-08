@@ -28,10 +28,10 @@ public class Profiles implements Serializable {
     @JoinColumn(name = "user_id", unique = true)
     private User user;
 
-    @Column(name = "skill", nullable = false)
+    @Column(name = "skill")
     private String Skill;
 
-    @Column(name = "number_years_experience", nullable = false)
+    @Column(name = "number_years_experience")
     private Integer numberYearsExperience;
 
     @Column(name = "description")
@@ -41,13 +41,13 @@ public class Profiles implements Serializable {
     @JoinColumn(name ="academic_name_id")
     private AcademicLevel academicLevel;
 
-    @Column(name = "desired_working_form", nullable = false)
+    @Column(name = "desired_working_form")
     String desiredWorkingForm;
 
-    @Column(name = "desired_salary", nullable = false)
+    @Column(name = "desired_salary")
     String desiredSalary;
 
-    @Column(name = "desired_working_address  ", nullable = false)
+    @Column(name = "desired_working_address  ")
     String desiredWorkingAddress;
 
     @Column(name = "is_delete ")

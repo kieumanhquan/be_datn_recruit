@@ -1,12 +1,10 @@
 package com.itsol.recruit.web.rest;
 
 import com.itsol.recruit.core.Constants;
-import com.itsol.recruit.dto.JobPaginationDto;
 import com.itsol.recruit.dto.MessageDto;
 import com.itsol.recruit.dto.UserPaginationDto;
 import com.itsol.recruit.entity.User;
 import com.itsol.recruit.service.UserService;
-import com.itsol.recruit.web.vm.SearchJobVM;
 import com.itsol.recruit.web.vm.SearchUserVM;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

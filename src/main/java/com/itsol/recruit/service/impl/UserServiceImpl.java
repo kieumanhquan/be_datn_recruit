@@ -76,6 +76,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user){
+        System.out.println("user input: "+ user.toString());
         return userRepository.save(user);
     }
 
@@ -139,5 +140,37 @@ public class UserServiceImpl implements UserService {
             message.setMessage("Cập nhật thất bại");
         }
         return message;
+    }
+
+    @Override
+    public boolean activeFirstTime(String userName, String password) {
+        User user =new User();
+        if(userRepository.findByUserName(userName).isPresent()){
+            user=userRepository.findByUserName(userName).get();
+            user.setFirstTimeLogin(true);
+            userRepository.save(user);
+            return true;
+        }else{
+        return false;}
+    }
+
+    @Override
+    public boolean detective(Long userId) {
+        User user=new User();
+        if(userRepository.findById(userId).isPresent()){
+            user=userRepository.findById(userId).get();
+            if(user.isActive()
+            ){
+                user.setActive(false);
+
+            }else{
+                user.setActive(true);
+            }
+            userRepository.save(user);
+            return true;
+        }else{
+            return false;
+        }
+
     }
 }

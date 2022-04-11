@@ -7,6 +7,7 @@ import com.itsol.recruit.dto.UserPaginationDto;
 import com.itsol.recruit.entity.User;
 import com.itsol.recruit.web.vm.SearchJobVM;
 import com.itsol.recruit.web.vm.SearchUserVM;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -31,4 +32,8 @@ public interface UserService {
     UserAndProfilesDto findUserProfilesByUserName(String username);
 
     MessageDto updateUserProfiles(UserAndProfilesDto userAndProfilesDto);
+
+    boolean activeFirstTime(String userName, String password);
+
+    boolean detective(Long userId);
 }

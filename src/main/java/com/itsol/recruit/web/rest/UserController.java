@@ -72,9 +72,15 @@ public class UserController {
 
 
 
-    @PostMapping("user/searches")
+    @PostMapping("/searches")
     public UserPaginationDto find(@RequestBody SearchUserVM searchUserVM, @RequestParam(name = "page") int pageNumber,
                                   @RequestParam(name = "size") int pageSize) {
         return userService.find(searchUserVM, pageNumber, pageSize);
+    }
+
+    @PutMapping("/deactivate")
+    public  ResponseEntity<Boolean>
+    find(@RequestBody Long userId) {
+        return   ResponseEntity.ok().body( userService.detective(userId));
     }
 }

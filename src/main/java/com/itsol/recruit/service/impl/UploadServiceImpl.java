@@ -83,7 +83,6 @@ public class UploadServiceImpl implements UploadService {
     public void saveAvatar(MultipartFile file, Long userId) {
         try {
             User user = userRepository.findOneById(userId);
-
             if(user == null){
                 log.error("username: " + user.getName() + "is not exits");
                 return;

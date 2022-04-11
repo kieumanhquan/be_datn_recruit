@@ -8,7 +8,7 @@ public interface AuthenticateService {
 
     MessageDto changePassword(UserDTO dto);
 
-    Boolean activeAccount(String otp, Long userId);
+    String activeAccount(String otp, Long userId);
 
     Boolean signupJe(UserDTO dto);
 }

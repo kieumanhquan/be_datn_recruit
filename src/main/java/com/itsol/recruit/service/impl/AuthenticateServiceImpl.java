@@ -62,6 +62,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setActive(false);
                 user.setRoles(roles);
+                user.setFirstTimeLogin(false);
                 userRepository.save(user);
                 OTP otp=new OTP(user);
                 otpRepository.save(otp);
@@ -91,7 +92,9 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                 }else{
                     if(dbOtp.getCode().equals(dto.getOtp())){
                         tempUser.setPassword(passwordEncoder.encode(dto.getPassword()));
+                        tempUser.setFirstTimeLogin(false);
                     userRepository.save(tempUser);
+                        System.out.println("tempuser:"+tempUser);
                    message="Đổi mật khẩu thành công";
                     }else {
                         System.out.println(dbOtp.getCode());
@@ -111,7 +114,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
     }
 
     @Override
-    public Boolean activeAccount(String otp, Long userId) {
+    public String activeAccount(String otp, Long userId) {
         try{
             Optional<User> dbUser=userRepository.findById(userId);
             if(dbUser.isPresent()){
@@ -120,13 +123,13 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                 if(dbOtp.getCode().equals(otp)){
                    user.setActive(true);
                    userRepository.save(user);
-                    return true;
+                    return "Kích hoạt tài khoản thành công";
                 }
-            }else{return false;}
+            }else{return "Kích hoạt tài khoản thất bại";}
         }catch(Exception e){
 
         }
-        return false;
+        return "Kích hoạt tài khoản thất bại";
     }
 
     @Override
@@ -138,6 +141,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setActive(false);
                 user.setRoles(roles);
+                user.setFirstTimeLogin(false);
                 userRepository.save(user);
                 OTP otp=new OTP(user);
                 otpRepository.save(otp);

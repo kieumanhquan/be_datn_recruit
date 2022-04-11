@@ -65,7 +65,7 @@ public class AuthenticateController {
         return ResponseEntity.ok().body(authenticateService.changePassword(dto));
  }
     @GetMapping(Constants.Api.Path.Account.ACTIVE_ACCOUNT)
-    public ResponseEntity<Boolean> activeAccount( @RequestParam("otp") String otp , @RequestParam("id") Long userId ) {
+    public ResponseEntity<String> activeAccount( @RequestParam("otp") String otp , @RequestParam("id") Long userId ) {
         return ResponseEntity.ok().body(authenticateService.activeAccount(otp,userId));
     }
 
@@ -85,7 +85,6 @@ public class AuthenticateController {
     public ResponseEntity<?> authenticateAdmin(@Valid @RequestBody LoginVM loginVM) {
 //		Tạo chuỗi authentication từ username và password (object LoginRequest
 //		- file này chỉ là 1 class bình thường, chứa 2 trường username và password)
-
         UsernamePasswordAuthenticationToken authenticationString = new UsernamePasswordAuthenticationToken(
                 loginVM.getUserName(),
                 loginVM.getPassword()

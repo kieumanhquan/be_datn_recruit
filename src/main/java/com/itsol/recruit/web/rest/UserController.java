@@ -77,4 +77,10 @@ public class UserController {
                                   @RequestParam(name = "size") int pageSize) {
         return userService.find(searchUserVM, pageNumber, pageSize);
     }
+
+    @PutMapping("/deactivate")
+    public  ResponseEntity<Boolean>
+    find(@RequestBody Long userId) {
+        return   ResponseEntity.ok().body( userService.detective(userId));
+    }
 }

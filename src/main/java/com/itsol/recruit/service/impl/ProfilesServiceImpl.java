@@ -17,17 +17,14 @@ public class ProfilesServiceImpl implements ProfilesService {
     private UserRepository userRepository;
 
     @Override
-    public Profiles save(Profiles profiles){
+    public Profiles save(Profiles profiles) {
         return profilesRepository.save(profiles);
     }
 
     @Override
-    public Profiles getProfileByUserId(Long id){
-        Profiles profiles=profilesRepository.findOneByUser(userRepository.findOneById(id));
-        if(profiles==null){
-            return new Profiles(userRepository.findOneById(id));
-        }else{
-        return profiles;}
+    public Profiles getProfileByUserId(Long id) {
+        Profiles profiles = profilesRepository.findOneByUser(userRepository.findOneById(id));
+        return profiles;
     }
 
 

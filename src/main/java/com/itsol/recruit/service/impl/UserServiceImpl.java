@@ -1,6 +1,5 @@
 package com.itsol.recruit.service.impl;
 
-import com.itsol.recruit.dto.JobPaginationDto;
 import com.itsol.recruit.dto.MessageDto;
 import com.itsol.recruit.dto.UserAndProfilesDto;
 import com.itsol.recruit.dto.UserPaginationDto;
@@ -11,7 +10,6 @@ import com.itsol.recruit.repository.ProfilesRepository;
 import com.itsol.recruit.repository.RoleRepository;
 import com.itsol.recruit.repository.UserRepository;
 import com.itsol.recruit.service.UserService;
-import com.itsol.recruit.web.vm.SearchJobVM;
 import com.itsol.recruit.web.vm.SearchUserVM;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

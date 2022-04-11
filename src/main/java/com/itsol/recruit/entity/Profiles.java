@@ -33,7 +33,7 @@ public class Profiles implements Serializable {
     private User user;
 
     @Column(name = "skill")
-    private String Skill;
+    private String skill;
 
     @Column(name = "number_years_experience")
     private Integer numberYearsExperience;

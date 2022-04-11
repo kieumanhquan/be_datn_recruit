@@ -49,42 +49,42 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
-   /*     Role role=new Role();
-        role.setId(1L);
-        role.setCode(Constants.Role.ADMIN);
-        roleRepository.save(role);
-        role.setId(2L);
-        role.setCode(Constants.Role.JE);
-        roleRepository.save(role);
-        role.setId(3L);
-        role.setCode(Constants.Role.USER);
-        roleRepository.save(role);
-
-        if (alreadySetup) {
-            return;
-        }
-        if (!userRepository.findByUserName("admin").isPresent() ) {
-            Set<Role> adminRole = roleRepository.findByCode(Constants.Role.ADMIN);
-            User user = new User();
-            user.setUserName("admin");
-            user.setName("admin");
-            user.setEmail("zexaldai@gmail.com");
-            user.setPhoneNumber("0961130568");
-            user.setBirthDay(new Date(2001 - 03 - 24));
-            user.setPassword(passwordEncoder.encode("admin"));
-            user.setRoles(adminRole);
-            user.setActive(true);
-            user.setDelete(false);
-            userRepository.save(user);
-            OTP otp=new OTP(user);
-            otpRepository.save(otp);
-            String email=emailService.buildOtpEmail(user.getName(),otp.getCode());
-            String link=emailService.buildActiveEmail(user.getName(),otp.getCode(),user.getId());
-            System.out.println("TEST OTP: "+otp.getCode());
-            System.out.println("Admin: " + user.toString());
-            emailService.send(user.getEmail(),email);
-            emailService.send(user.getEmail(),link);
-            alreadySetup = true;
-        }*/
+//       Role role=new Role();
+//        role.setId(1L);
+//        role.setCode(Constants.Role.ADMIN);
+//        roleRepository.save(role);
+//        role.setId(2L);
+//        role.setCode(Constants.Role.JE);
+//        roleRepository.save(role);
+//        role.setId(3L);
+//        role.setCode(Constants.Role.USER);
+//        roleRepository.save(role);
+//
+//        if (alreadySetup) {
+//            return;
+//        }
+//        if (!userRepository.findByUserName("admin").isPresent() ) {
+//            Set<Role> adminRole = roleRepository.findByCode(Constants.Role.ADMIN);
+//            User user = new User();
+//            user.setUserName("admin");
+//            user.setName("admin");
+//            user.setEmail("zexaldai@gmail.com");
+//            user.setPhoneNumber("0961130568");
+//            user.setBirthday(new Date(2001 - 03 - 24));
+//            user.setPassword(passwordEncoder.encode("admin"));
+//            user.setRoles(adminRole);
+//            user.setActive(true);
+//            user.setDelete(false);
+//            userRepository.save(user);
+//            OTP otp=new OTP(user);
+//            otpRepository.save(otp);
+//            String email=emailService.buildOtpEmail(user.getName(),otp.getCode());
+//            String link=emailService.buildActiveEmail(user.getName(),otp.getCode(),user.getId());
+//            System.out.println("TEST OTP: "+otp.getCode());
+//            System.out.println("Admin: " + user.toString());
+//            emailService.send(user.getEmail(),email);
+//            emailService.send(user.getEmail(),link);
+//            alreadySetup = true;
+//        }
     }
 }

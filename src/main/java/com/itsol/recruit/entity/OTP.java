@@ -25,12 +25,9 @@ public class OTP {
 
     public OTP(User user){
         this.user = user;
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder();
-        do{
-            sb.append(String.valueOf(random.nextInt(10)));
-        }while (sb.length() < 5);
-        code = sb.toString();
+        Random r = new Random( System.currentTimeMillis() );
+        int randomNumber=(10000 + r.nextInt(20000));
+        code= String.valueOf(randomNumber);
         issueAt = System.currentTimeMillis();
     }
 

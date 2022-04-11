@@ -69,6 +69,7 @@ public class UploadController {
         return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
     }
 
+
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {

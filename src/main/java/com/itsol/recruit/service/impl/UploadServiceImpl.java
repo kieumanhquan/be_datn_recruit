@@ -103,7 +103,7 @@ public class UploadServiceImpl implements UploadService {
 
     public void registerJobForUser(User user, String fileName, Long jobId){
 
-        String url = CommonConst.URL_DOWNLOAD_CV + fileName;
+        String url = fileName;
         Job job = jobRepository.findOneById(jobId);
         JobRegister jobRegister = new JobRegister();
         jobRegister.setUser(user);

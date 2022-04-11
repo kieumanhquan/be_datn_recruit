@@ -2,6 +2,7 @@ package com.itsol.recruit.web.rest;
 
 import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.dto.JobRegisterPaginationDto;
+import com.itsol.recruit.dto.ReasonDto;
 import com.itsol.recruit.dto.ScheduleDto;
 import com.itsol.recruit.dto.StatusRegisterDto;
 import com.itsol.recruit.entity.JobRegister;
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = Constants.Api.Path.PUBLIC+"/job-registers")
 public class JobRegisterController {
+
     @Autowired
     private JobRegisterService jobRegisterService;
 
@@ -31,6 +33,11 @@ public class JobRegisterController {
     @PostMapping("/searches/sortByName")
     public JobRegisterPaginationDto sortByName(@RequestBody SearchJobRegisterVM searchJobRegisterVM,@RequestParam(name = "page") int pageNumber, @RequestParam(name = "size") int pageSize) {
         return jobRegisterService.sortByName(searchJobRegisterVM, pageNumber, pageSize);
+    }
+
+    @PutMapping()
+    public ResponseEntity<JobRegister> schedule(@RequestBody JobRegister jobRegister) {
+        return ResponseEntity.ok().body(jobRegisterService.save(jobRegister));
     }
 
     @GetMapping("/id={id}")
@@ -54,6 +61,12 @@ public class JobRegisterController {
         return ResponseEntity.ok().body(jobRegisterService.schedule(scheduleDto));
     }
 
+    @PutMapping("/reason")
+    public ResponseEntity<JobRegister> updateReason(@RequestBody ReasonDto reasonDto) {
+        return ResponseEntity.ok().body(jobRegisterService.updateReason(reasonDto));
+    }
+
+
     @GetMapping("/download/{id}")
     @CrossOrigin
     public ResponseEntity<Resource> downloadApplicantCv(@PathVariable("id") Long id) throws Exception {
@@ -66,4 +79,9 @@ public class JobRegisterController {
                 .body(resource);
     }
 
+
+    @GetMapping("/find-by-user-and-job")
+        public ResponseEntity<JobRegister> findByUserAndJob(@RequestParam(name = "user_id") long user_id, @RequestParam(name = "job_id") long job_id) {
+        return ResponseEntity.ok().body(jobRegisterService.findByUserAndJob(user_id,job_id));
+    }
 }

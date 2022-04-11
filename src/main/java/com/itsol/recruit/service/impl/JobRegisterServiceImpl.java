@@ -1,15 +1,20 @@
 package com.itsol.recruit.service.impl;
 
 import com.itsol.recruit.dto.JobRegisterPaginationDto;
+import com.itsol.recruit.dto.ReasonDto;
 import com.itsol.recruit.dto.ScheduleDto;
 import com.itsol.recruit.dto.StatusRegisterDto;
+import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.entity.JobRegister;
 import com.itsol.recruit.entity.User;
 import com.itsol.recruit.repository.JobRegisterRepository;
+import com.itsol.recruit.repository.JobRepository;
 import com.itsol.recruit.repository.StatusJobRegisterRepository;
+import com.itsol.recruit.repository.UserRepository;
 import com.itsol.recruit.repository.repoext.JobRegisterRepositoryExt;
 import com.itsol.recruit.service.JobRegisterService;
 import com.itsol.recruit.service.email.EmailService;
+import com.itsol.recruit.utils.CommonConst;
 import com.itsol.recruit.web.vm.SearchJobRegisterVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -27,6 +32,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class JobRegisterServiceImpl implements JobRegisterService {
+    private final Path root = Paths.get(CommonConst.DIRECTORY_UPLOAD_CV);
 
     @Autowired
     private JobRegisterRepository jobRegisterRepository;
@@ -40,6 +46,16 @@ public class JobRegisterServiceImpl implements JobRegisterService {
     @Autowired
     private JobRegisterRepositoryExt jobRegisterRepositoryExt;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private JobRepository jobRepository;
+
+    @Override
+    public JobRegister save(JobRegister jobRegister){
+        return jobRegisterRepository.save(jobRegister);
+    }
 
     @Override
     public JobRegisterPaginationDto find(SearchJobRegisterVM searchJobRegisterVM, int pageNumber, int pageSize) {
@@ -88,7 +104,7 @@ public class JobRegisterServiceImpl implements JobRegisterService {
             throw new NullPointerException("Could not found applicant");
         }
         String cvFilePath = jobRegister.getCv();
-        Path file = Paths.get(cvFilePath);
+        Path file = root.resolve(cvFilePath);
         Resource resource = new UrlResource(file.toUri());
 
         if (!resource.exists() && !resource.isReadable()) {
@@ -97,6 +113,21 @@ public class JobRegisterServiceImpl implements JobRegisterService {
         return resource;
     }
 
+    @Override
+    public JobRegister updateReason(ReasonDto reasonDto){
+        JobRegister jobRegister = jobRegisterRepository.findOneById(reasonDto.getJobId());
+        jobRegister.setStatusJobRegister(statusJobRegisterRepository.findOneById(reasonDto.getStatusId()));
+        jobRegister.setReason(reasonDto.getReason());
+        return jobRegisterRepository.save(jobRegister);
+    }
+
+
+    @Override
+    public JobRegister findByUserAndJob(Long userId, Long jobId){
+        User user = userRepository.findOneById(userId);
+        Job job = jobRepository.findOneById(jobId);
+        return jobRegisterRepository.findByUserAndJob(user,job);
+    }
 
 
 }

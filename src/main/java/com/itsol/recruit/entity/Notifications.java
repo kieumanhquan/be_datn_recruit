@@ -32,13 +32,14 @@ public class Notifications {
     private User receiver;
 
     @Column(name = "create_date")
-    private Date dateInterview;
+    private Date createDate;
+
+    @ManyToOne
+    @JoinColumn(name = "job_id")
+    private Job job;
 
     @Column(name = "content")
     private String content;
-
-    @Column(name = "res_id")
-    private Long res;// id của job hoặc job register
 
     @ManyToOne
     @JoinColumn(name= "type_id")

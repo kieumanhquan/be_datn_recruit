@@ -1,13 +1,10 @@
 package com.itsol.recruit.web.vm;
 
-import com.itsol.recruit.core.Constants;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @Getter
 @Setter

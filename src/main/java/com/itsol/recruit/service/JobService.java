@@ -7,6 +7,7 @@ import com.itsol.recruit.dto.StatusDto;
 import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.web.vm.SearchJobVM;
 
+import java.util.Date;
 import java.util.List;
 
 public interface JobService {
@@ -26,6 +27,12 @@ public interface JobService {
     JobPaginationDto getJobHighSalary(Integer salary, int pageNumber, int pageSize);
 
     JobPaginationDto getJobDue(Integer numberDay, int pageNumber, int pageSize);
+
+    Long getTotalJobDueDate(Date startDate, Date endDate);
+
+    Long getTotalJob(Date startDate, Date endDate);
+
+    Long getTotalViews(Date startDate, Date endDate);
 
     Job updateStatus(StatusDto statusDto);
 

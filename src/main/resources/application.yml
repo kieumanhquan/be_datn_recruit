@@ -41,5 +41,9 @@ application:
       tokenValidityMilliseconds: 86400000
       rememberMeTokenValiditySeconds: 25920000000
 
+logging:
+  level:
+    ROOT: DEBUG
+
 
 

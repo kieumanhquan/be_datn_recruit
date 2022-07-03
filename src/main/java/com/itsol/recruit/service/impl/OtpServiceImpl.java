@@ -18,14 +18,18 @@ import java.util.List;
 @Service
 @Transactional
 public class OtpServiceImpl implements OtpService {
-    @Autowired
-    OtpRepository otpRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    UserService userService;
-    @Autowired
-    EmailService emailService;
+    private final OtpRepository otpRepository;
+
+    private final UserRepository userRepository;
+
+
+    private final EmailService emailService;
+
+    public OtpServiceImpl(OtpRepository otpRepository, UserRepository userRepository, EmailService emailService) {
+        this.otpRepository = otpRepository;
+        this.userRepository = userRepository;
+        this.emailService = emailService;
+    }
 
     @Override
     public List<OTP> getAll() {
@@ -60,13 +64,11 @@ public class OtpServiceImpl implements OtpService {
     @Override
     public MessageDto sendOtp(UserDTO userDTO) {
         MessageDto messageDto = new MessageDto();
-        Boolean obj = false;
-        System.out.println(userDTO);
         try {
             User user = userRepository.findOneByEmail(userDTO.getEmail()).get();
             System.out.println(user);
             if (user ==  null) {
-                messageDto.setMessage("Không tìm thấy Email.");
+                messageDto.setMessage("Email not found.");
                 messageDto.setObj(false);
             } else {
                 OTP otp = new OTP(user);
@@ -79,12 +81,12 @@ public class OtpServiceImpl implements OtpService {
                     otpRepository.save(otp);
                 }
                 String email = emailService.buildOtpEmail(user.getName(), otp.getCode());
-                emailService.send(user.getEmail(), email);
-                messageDto.setMessage("Đã gửi mã OTP đến mail: " + user.getEmail());
+                emailService.send(user.getEmail(), email, "Confirm email");
+                messageDto.setMessage("OTP code sent to mail: " + user.getEmail());
                 messageDto.setObj(true);
             }
         } catch (Exception e) {
-            System.out.println(e);
+            throw new IllegalStateException(e);
         }
         return messageDto;
     }

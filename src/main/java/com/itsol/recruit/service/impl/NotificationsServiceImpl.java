@@ -4,7 +4,6 @@ import com.itsol.recruit.entity.Notifications;
 import com.itsol.recruit.repository.NotificationsRepository;
 import com.itsol.recruit.repository.UserRepository;
 import com.itsol.recruit.service.NotificationsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,11 +11,14 @@ import java.util.List;
 @Service
 public class NotificationsServiceImpl implements NotificationsService {
 
-    @Autowired
-    private NotificationsRepository notificationsRepository;
+    private final NotificationsRepository notificationsRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public NotificationsServiceImpl(NotificationsRepository notificationsRepository, UserRepository userRepository) {
+        this.notificationsRepository = notificationsRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public Notifications add(Notifications notifications){

@@ -16,41 +16,41 @@ import com.itsol.recruit.service.JobRegisterService;
 import com.itsol.recruit.service.email.EmailService;
 import com.itsol.recruit.utils.CommonConst;
 import com.itsol.recruit.web.vm.SearchJobRegisterVM;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class JobRegisterServiceImpl implements JobRegisterService {
     private final Path root = Paths.get(CommonConst.DIRECTORY_UPLOAD_CV);
 
-    @Autowired
-    private JobRegisterRepository jobRegisterRepository;
+    private final JobRegisterRepository jobRegisterRepository;
 
-    @Autowired
-    private StatusJobRegisterRepository statusJobRegisterRepository;
+    private final StatusJobRegisterRepository statusJobRegisterRepository;
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
-    @Autowired
-    private JobRegisterRepositoryExt jobRegisterRepositoryExt;
+    private final JobRegisterRepositoryExt jobRegisterRepositoryExt;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private JobRepository jobRepository;
+    private final JobRepository jobRepository;
+
+    public JobRegisterServiceImpl(JobRegisterRepository jobRegisterRepository, StatusJobRegisterRepository statusJobRegisterRepository, EmailService emailService, JobRegisterRepositoryExt jobRegisterRepositoryExt, UserRepository userRepository, JobRepository jobRepository) {
+        this.jobRegisterRepository = jobRegisterRepository;
+        this.statusJobRegisterRepository = statusJobRegisterRepository;
+        this.emailService = emailService;
+        this.jobRegisterRepositoryExt = jobRegisterRepositoryExt;
+        this.userRepository = userRepository;
+        this.jobRepository = jobRepository;
+    }
 
     @Override
     public JobRegister save(JobRegister jobRegister){
@@ -78,6 +78,22 @@ public class JobRegisterServiceImpl implements JobRegisterService {
     }
 
     @Override
+    public Long getByDateAndStatus(Date sDate, Date eDate, Long id) {
+        return jobRegisterRepository.findByDateAndStatus(sDate, eDate, id);
+    }
+
+    @Override
+    public List<Long> getTotalByMonth(Date sDate, Date eDate, Long id) {
+        return jobRegisterRepository.findTotalByMonth(sDate, eDate, id);
+    }
+
+    @Override
+    public Long getTotalRegister(Date sDate, Date eDate) {
+        return jobRegisterRepository.findTotalRegister(sDate, eDate);
+    }
+
+
+    @Override
     public JobRegister updateStatus(StatusRegisterDto statusRegisterDto){
        JobRegister jobRegister = jobRegisterRepository.findOneById(statusRegisterDto.getJobRegisterId());
        jobRegister.setStatusJobRegister(statusJobRegisterRepository.findOneById(statusRegisterDto.getStatusRegisterId()));
@@ -93,7 +109,7 @@ public class JobRegisterServiceImpl implements JobRegisterService {
         jobRegister.setAddressInterview(scheduleDto.getAddressInterview());
         User user = jobRegister.getUser();
         String link=emailService.buildSchedule(jobRegister);
-            emailService.send(user.getEmail(),link);
+            emailService.send(user.getEmail(),link, "Schedule an interview");
         return jobRegisterRepository.save(jobRegister);
     }
 

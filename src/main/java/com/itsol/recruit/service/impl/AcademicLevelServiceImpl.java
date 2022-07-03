@@ -4,7 +4,6 @@ import com.itsol.recruit.entity.AcademicLevel;
 import com.itsol.recruit.repository.AcademicLevelRepository;
 import com.itsol.recruit.service.AcademicLevelService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

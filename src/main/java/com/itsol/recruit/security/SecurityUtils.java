@@ -1,5 +1,6 @@
 package com.itsol.recruit.security;
 
+import com.itsol.recruit.core.Constants;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -53,9 +54,8 @@ public final class SecurityUtils {
     public static boolean isAuthenticated() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication()).map(authentication -> {
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.addAll(authentication.getAuthorities());
-            return authorities.stream().noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(AuthoritiesConstants.ROLE_USER));
+            List<GrantedAuthority> authorities = new ArrayList<>(authentication.getAuthorities());
+            return authorities.stream().noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(Constants.Role.USER));
         }).orElse(false);
     }
 
@@ -70,8 +70,7 @@ public final class SecurityUtils {
     public static boolean isCurrentUserInRole(String authority) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication()).map(authentication -> {
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.addAll(authentication.getAuthorities());
+            List<GrantedAuthority> authorities = new ArrayList<>(authentication.getAuthorities());
             return authorities.stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(authority));
         }).orElse(false);
     }

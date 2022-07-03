@@ -11,7 +11,6 @@ import com.itsol.recruit.repository.repoext.JobRepositoryExt;
 import com.itsol.recruit.service.JobService;
 import com.itsol.recruit.service.mapper.JobMapper;
 import com.itsol.recruit.web.vm.SearchJobVM;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -21,17 +20,20 @@ import java.util.List;
 @Service
 public class JobServiceImpl implements JobService {
 
-    @Autowired
-    private JobRepository jobRepository;
+    private final JobRepository jobRepository;
 
-    @Autowired
-    private JobMapper jobMapper;
+    private final JobMapper jobMapper;
 
-    @Autowired
-    private JobRepositoryExt jobRepositoryExt;
+    private final JobRepositoryExt jobRepositoryExt;
 
-    @Autowired
-    private StatusJobRepository statusJobRepository;
+    private final StatusJobRepository statusJobRepository;
+
+    public JobServiceImpl(JobRepository jobRepository, JobMapper jobMapper, JobRepositoryExt jobRepositoryExt, StatusJobRepository statusJobRepository) {
+        this.jobRepository = jobRepository;
+        this.jobMapper = jobMapper;
+        this.jobRepositoryExt = jobRepositoryExt;
+        this.statusJobRepository = statusJobRepository;
+    }
 
 
     @Override
@@ -92,6 +94,27 @@ public class JobServiceImpl implements JobService {
         dt = c.getTime();
 
         return jobRepositoryExt.getJobDue(dt,pageNumber,pageSize);
+    }
+
+    @Override
+    public Long getTotalJobDueDate(Date startDate, Date endDate){
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, -7);
+        dt = c.getTime();
+
+        return jobRepository.findTotalJobDueDate(startDate,endDate, dt);
+    }
+
+    @Override
+    public Long getTotalJob(Date startDate, Date endDate){
+        return jobRepository.findTotalJob(startDate,endDate);
+    }
+
+    @Override
+    public Long getTotalViews(Date startDate, Date endDate){
+        return jobRepository.findTotalViews(startDate,endDate);
     }
 
     @Override

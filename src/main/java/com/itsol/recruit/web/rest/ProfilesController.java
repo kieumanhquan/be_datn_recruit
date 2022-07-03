@@ -3,7 +3,6 @@ package com.itsol.recruit.web.rest;
 import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.entity.Profiles;
 import com.itsol.recruit.service.ProfilesService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = Constants.Api.Path.USER)
 public class ProfilesController {
 
-    @Autowired
-    private ProfilesService profilesService;
+    private final ProfilesService profilesService;
+
+    public ProfilesController(ProfilesService profilesService) {
+        this.profilesService = profilesService;
+    }
 
     @PostMapping(value = "/profiles")
     public ResponseEntity<Profiles> add(@RequestBody Profiles profiles){

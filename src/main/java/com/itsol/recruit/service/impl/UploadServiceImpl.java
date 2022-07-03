@@ -10,7 +10,6 @@ import com.itsol.recruit.repository.UserRepository;
 import com.itsol.recruit.service.UploadService;
 import com.itsol.recruit.utils.CommonConst;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -32,17 +31,20 @@ import java.util.stream.Stream;
 public class UploadServiceImpl implements UploadService {
     private final Path root = Paths.get(CommonConst.DIRECTORY_UPLOAD_CV);
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private JobRepository jobRepository;
+    private final JobRepository jobRepository;
 
-    @Autowired
-    private StatusJobRegisterRepository statusJobRegisterRepository;
+    private final StatusJobRegisterRepository statusJobRegisterRepository;
 
-    @Autowired
-    JobRegisterRepository jobRegisterRepository;
+    private final JobRegisterRepository jobRegisterRepository;
+
+    public UploadServiceImpl(UserRepository userRepository, JobRepository jobRepository, StatusJobRegisterRepository statusJobRegisterRepository, JobRegisterRepository jobRegisterRepository) {
+        this.userRepository = userRepository;
+        this.jobRepository = jobRepository;
+        this.statusJobRegisterRepository = statusJobRegisterRepository;
+        this.jobRegisterRepository = jobRegisterRepository;
+    }
 
     @Override
     public void init() {
@@ -84,7 +86,7 @@ public class UploadServiceImpl implements UploadService {
         try {
             User user = userRepository.findOneById(userId);
             if(user == null){
-                log.error("username: " + user.getName() + "is not exits");
+                log.error("username: " + "is not exits");
                 return;
             }
             String fileName = file.getOriginalFilename();
@@ -100,15 +102,14 @@ public class UploadServiceImpl implements UploadService {
         }
     }
 
-    public void registerJobForUser(User user, String fileName, Long jobId){
+    private void registerJobForUser(User user, String fileNameCV, Long jobId){
 
-        String url = fileName;
         Job job = jobRepository.findOneById(jobId);
         JobRegister jobRegister = new JobRegister();
         jobRegister.setUser(user);
         jobRegister.setStatusJobRegister(statusJobRegisterRepository.findOneById(1L));
         jobRegister.setJob(job);
-        jobRegister.setCv(url);
+        jobRegister.setCv(fileNameCV);
         jobRegister.setDateRegister(new Date(System.currentTimeMillis()));
         jobRegister.setIsDelete(false);
         jobRegisterRepository.save(jobRegister);

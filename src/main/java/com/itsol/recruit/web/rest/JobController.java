@@ -7,8 +7,8 @@ import com.itsol.recruit.dto.ReasonDto;
 import com.itsol.recruit.dto.StatusDto;
 import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.service.JobService;
+import com.itsol.recruit.web.vm.DashboardVM;
 import com.itsol.recruit.web.vm.SearchJobVM;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +19,11 @@ import java.util.List;
 @RequestMapping(value = Constants.Api.Path.PUBLIC + "/jobs")
 public class JobController {
 
-    @Autowired
-    private JobService jobService;
+    private final JobService jobService;
+
+    public JobController(JobService jobService) {
+        this.jobService = jobService;
+    }
 
     @PostMapping("/searches")
     public JobPaginationDto find(@RequestBody SearchJobVM searchJobVM, @RequestParam(name = "page") int pageNumber,
@@ -32,6 +35,24 @@ public class JobController {
     public JobPaginationDto sortByName(@RequestBody SearchJobVM searchJobVM, @RequestParam(name = "page") int pageNumber,
                                        @RequestParam(name = "size") int pageSize) {
         return jobService.sortByName(searchJobVM, pageNumber, pageSize);
+    }
+
+    @PostMapping("/find-total-job")
+    public ResponseEntity<Long> getTotalJob(@RequestBody DashboardVM dashboardVM) {
+        return ResponseEntity.ok().body(jobService.getTotalJob(dashboardVM.getStartDate(),
+                dashboardVM.getEndDate()));
+    }
+
+    @PostMapping("/find-total-views")
+    public ResponseEntity<Long> getTotalViews(@RequestBody DashboardVM dashboardVM) {
+        return ResponseEntity.ok().body(jobService.getTotalViews(dashboardVM.getStartDate(),
+                dashboardVM.getEndDate()));
+    }
+
+    @PostMapping("/find-total-dueDate")
+    public ResponseEntity<Long> getTotalDueDate(@RequestBody DashboardVM dashboardVM) {
+        return ResponseEntity.ok().body(jobService.getTotalJobDueDate(dashboardVM.getStartDate(),
+                dashboardVM.getEndDate()));
     }
 
     @GetMapping()

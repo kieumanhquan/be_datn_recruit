@@ -25,14 +25,14 @@ public class EmailService implements EmailSender {
 
     @Override
     @Async
-    public void send(String to, String email) {
+    public void send(String to, String email, String subject) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper =
                     new MimeMessageHelper(mimeMessage, "utf-8");
             helper.setText(email, true);
             helper.setTo(to);
-            helper.setSubject("Confirm your email");
+            helper.setSubject(subject);
             helper.setFrom("dai7031@gmail.com");
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
@@ -40,25 +40,6 @@ public class EmailService implements EmailSender {
             throw new IllegalStateException("failed to send email");
         }
     }
-
-    @Override
-    @Async
-    public void sendMailOrder(String to, String email) {
-        try {
-            MimeMessage mimeMessage = mailSender.createMimeMessage();
-            MimeMessageHelper helper =
-                    new MimeMessageHelper(mimeMessage, "utf-8");
-            helper.setText(email, true);
-            helper.setTo(to);
-            helper.setSubject("Lịch phỏng vấn");
-            helper.setFrom("dai7031@gmail.com");
-            mailSender.send(mimeMessage);
-        } catch (MessagingException e) {
-            LOGGER.error("failed to send email", e);
-            throw new IllegalStateException("failed to send email");
-        }
-    }
-
 
     public String buildActiveEmail(String name, String otp, Long id) {
         String link = "http://localhost:9090/api/auth" + Constants.Api.Path.Account.ACTIVE_ACCOUNT + "?otp=" + otp + "&id=" + id;
@@ -204,19 +185,19 @@ public class EmailService implements EmailSender {
         SimpleDateFormat day = new SimpleDateFormat("dd/MM/yyyy");
         return "<div>\n" +
                 "  <p>Dear anh/chị <strong></strong></p>\n" +
-                "  <p>Công ty ITSOL rất vui và vinh hạnh khi nhận được hồ sơ ứng tuyển của anh/chị vào vị trí "+jobRegister.getJob().getJobPosition().getCode()+".\n" +
+                "  <p>Công ty ITSOL rất vui và vinh hạnh khi nhận được hồ sơ ứng tuyển của anh/chị vào vị trí " + jobRegister.getJob().getJobPosition().getCode() + ".\n" +
                 "    Chúng tôi đã nhận được CV của anh/chị và mong muốn có một cuộc phỏng vấn để trao đổi trực tiếp về\n" +
                 "    kiến thức cũng như công việc mà anh/chị đã ứng tuyển.\n" +
                 "  </p>\n" +
                 "  <p>\n" +
-                "    Thời gian phỏng vấn dự kiến vào lúc "+time.format(jobRegister.getDateInterview()) +" ngày "+day.format(jobRegister.getDateInterview())+" qua công cụ "+jobRegister.getAddressInterview()+"\n" +
+                "    Thời gian phỏng vấn dự kiến vào lúc " + time.format(jobRegister.getDateInterview()) + " ngày " + day.format(jobRegister.getDateInterview()) + " qua công cụ " + jobRegister.getAddressInterview() + "\n" +
                 "    (chúng tôi sẽ gửi lại link sau khi anh/chị xác nhận đồng ý phỏng vấn bằng các reply lại mail này).\n" +
                 "  </p>\n" +
                 "  <p>\n" +
                 "    Chúng tôi rất hy vọng anh/chị sớm phản hồi và mong rằng chúng ta sẽ được hợp tác cùng nhau trong tương lai.\n" +
                 "  </p>\n" +
                 "  <p>\n" +
-                "    Mọi thắc mắc xin vui lòng liên hệ tới "+jobRegister.getUser().getName()+", SĐT: "+jobRegister.getUser().getPhoneNumber()+" trong giờ hành chính để được giải đáp.\n" +
+                "    Mọi thắc mắc xin vui lòng liên hệ tới " + jobRegister.getUser().getName() + ", SĐT: " + jobRegister.getUser().getPhoneNumber() + " trong giờ hành chính để được giải đáp.\n" +
                 "  </p>\n" +
                 "  <p>\n" +
                 "    Thanks & best regards,\n" +

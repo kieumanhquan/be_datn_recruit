@@ -4,13 +4,12 @@ import com.itsol.recruit.dto.JobRegisterPaginationDto;
 import com.itsol.recruit.dto.ReasonDto;
 import com.itsol.recruit.dto.ScheduleDto;
 import com.itsol.recruit.dto.StatusRegisterDto;
-import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.entity.JobRegister;
-import com.itsol.recruit.entity.User;
 import com.itsol.recruit.web.vm.SearchJobRegisterVM;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 public interface JobRegisterService {
@@ -23,6 +22,12 @@ public interface JobRegisterService {
     JobRegister getById(Long id);
 
     List<JobRegister> getByJobId(Long id);
+
+    Long getByDateAndStatus(Date sDate, Date eDate, Long id);
+
+    List<Long> getTotalByMonth(Date sDate, Date eDate, Long id);
+
+    Long getTotalRegister(Date sDate, Date eDate);
 
     JobRegister updateStatus(StatusRegisterDto statusRegisterDto);
 

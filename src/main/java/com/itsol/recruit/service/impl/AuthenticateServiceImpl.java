@@ -1,18 +1,18 @@
 package com.itsol.recruit.service.impl;
 
-import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.dto.MessageDto;
 import com.itsol.recruit.dto.UserDTO;
 import com.itsol.recruit.entity.OTP;
-import com.itsol.recruit.entity.Profiles;
 import com.itsol.recruit.entity.Role;
 import com.itsol.recruit.entity.User;
-import com.itsol.recruit.repository.*;
+import com.itsol.recruit.repository.OtpRepository;
+import com.itsol.recruit.repository.ProfilesRepository;
+import com.itsol.recruit.repository.RoleRepository;
+import com.itsol.recruit.repository.UserRepository;
 import com.itsol.recruit.service.AuthenticateService;
 import com.itsol.recruit.service.email.EmailService;
 import com.itsol.recruit.service.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,40 +25,41 @@ import java.util.Set;
 @Slf4j
 public class AuthenticateServiceImpl implements AuthenticateService {
 
-    public final AuthenticateRepository authenticateRepository;
+    private final UserMapper userMapper;
 
-    public final UserMapper userMapper;
+    private final RoleRepository roleRepository;
 
-    public final RoleRepository roleRepository;
+    private final UserRepository userRepository;
 
-    public final UserRepository userRepository;
-
-    public final EmailService emailService;
+    private final EmailService emailService;
 
     public final ProfilesRepository profilesRepository;
 
-    @Autowired
-    OtpRepository otpRepository;
+    private final OtpRepository otpRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthenticateServiceImpl(AuthenticateRepository authenticateRepository, UserMapper userMapper, RoleRepository roleRepository, UserRepository userRepository, EmailService emailService, ProfilesRepository profilesRepository) {
-        this.authenticateRepository = authenticateRepository;
+    public AuthenticateServiceImpl(UserMapper userMapper, RoleRepository
+            roleRepository, UserRepository userRepository, EmailService emailService,
+                                   ProfilesRepository profilesRepository, OtpRepository otpRepository,
+                                   PasswordEncoder passwordEncoder) {
         this.userMapper = userMapper;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
         this.profilesRepository = profilesRepository;
+        this.otpRepository = otpRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public Boolean signup(UserDTO dto) {
-        if (!userRepository.findOneByEmail(dto.getEmail()).isPresent() && !userRepository.findByUserName(dto.getUserName()).isPresent() && !userRepository.findByPhoneNumber(dto.getPhoneNumber()).isPresent()) {
+    public Boolean signup(UserDTO dto, String role) {
+        if (!userRepository.findOneByEmail(dto.getEmail()).isPresent()
+                && !userRepository.findByUserName(dto.getUserName()).isPresent()
+                && !userRepository.findByPhoneNumber(dto.getPhoneNumber()).isPresent()) {
             try {
-                Set<Role> roles = roleRepository.findByCode(Constants.Role.USER);
+                Set<Role> roles = roleRepository.findByCode(role);
                 User user = userMapper.toEntity(dto);
-                Profiles profiles = new Profiles();
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setActive(false);
                 user.setRoles(roles);
@@ -67,7 +68,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                 OTP otp = new OTP(user);
                 otpRepository.save(otp);
                 String link = emailService.buildActiveEmail(user.getName(), otp.getCode(), user.getId());
-                emailService.send(user.getEmail(), link);
+                emailService.send(user.getEmail(), link, "Confirm email");
                 return true;
             } catch (Exception e) {
                 log.error("cannot save to database");
@@ -78,37 +79,34 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 
     @Override
     public MessageDto changePassword(UserDTO dto) {
-        boolean obj = false;
         String message = "";
         try {
-            System.out.println("email change pass word: " + dto.getPassword());
+            System.out.println("email change password: " + dto.getPassword());
             Optional<User> user = userRepository.findOneByEmail(dto.getEmail());
             if (user.isPresent()) {
                 OTP dbOtp = otpRepository.findByUser(user.get());
                 User tempUser = user.get();
                 System.out.println("old pass: " + tempUser.getPassword());
                 if (dbOtp.isExpired()) {
-                    message = "Mã otp đã hết hạn";
+                    message = "The otp code has expired";
                 } else {
                     if (dbOtp.getCode().equals(dto.getOtp())) {
                         tempUser.setPassword(passwordEncoder.encode(dto.getPassword()));
                         tempUser.setFirstTimeLogin(false);
                         userRepository.save(tempUser);
-                        System.out.println("tempuser:" + tempUser);
-                        message = "Đổi mật khẩu thành công";
+                        message = "Change password successfully";
                     } else {
-                        System.out.println(dbOtp.getCode());
-                        System.out.println(dto.getOtp());
-                        message = "Mã otp không đúng vui lòng thử lại";
+                        message = "The otp code is incorrect, please try again";
                     }
                 }
             }
         } catch (Exception e) {
-            System.out.println(e);
-            message = "Đã sảy ra lỗi trong quá trình đổi mật khẩu vui lòng thử lại sau.";
+            message = "An error occurred while changing the password, please try again later";
+            throw new IllegalStateException(message, e);
         }
+
         MessageDto messageDto = new MessageDto();
-        messageDto.setObj(obj);
+        messageDto.setObj(false);
         messageDto.setMessage(message);
         return messageDto;
     }
@@ -123,40 +121,17 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                 if (dbOtp.getCode().equals(otp)) {
                     user.setActive(true);
                     userRepository.save(user);
-                    return "Kích hoạt tài khoản thành công " +
+                    return "Account activation successful " +
                             "url:http://localhost:4200/auth";
                 }
             } else {
-                return "Kích hoạt tài khoản thất bại" +
+                return "Account activation failed" +
                         "url:http://localhost:4200/auth";
             }
         } catch (Exception e) {
-
+            throw new IllegalStateException("Account activation failed", e);
         }
-        return "Kích hoạt tài khoản thất bại";
-    }
-
-    @Override
-    public Boolean signupJe(UserDTO dto) {
-        if (!userRepository.findOneByEmail(dto.getEmail()).isPresent() && !userRepository.findByUserName(dto.getUserName()).isPresent() && !userRepository.findByPhoneNumber(dto.getPhoneNumber()).isPresent()) {
-            try {
-                Set<Role> roles = roleRepository.findByCode(Constants.Role.JE);
-                User user = userMapper.toEntity(dto);
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
-                user.setActive(false);
-                user.setRoles(roles);
-                user.setFirstTimeLogin(false);
-                userRepository.save(user);
-                OTP otp = new OTP(user);
-                otpRepository.save(otp);
-                String link = emailService.buildActiveEmail(user.getName(), otp.getCode(), user.getId());
-                emailService.send(user.getEmail(), link);
-                return true;
-            } catch (Exception e) {
-                log.error("cannot save to database");
-                return false;
-            }
-        } else return false;
+        return "Account activation failed";
     }
 
 }

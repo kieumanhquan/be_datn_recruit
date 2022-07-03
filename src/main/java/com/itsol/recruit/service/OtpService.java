@@ -11,7 +11,7 @@ import java.util.List;
 
 
 public interface OtpService {
-     List<OTP>  getAll();
+     List<OTP> getAll();
 
      OTP findById(Long id);
 

@@ -4,28 +4,29 @@ import com.itsol.recruit.dto.JobDTO;
 import com.itsol.recruit.entity.Job;
 import com.itsol.recruit.repository.*;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 @Component
 public class JobMapper implements EntityMapper<JobDTO, Job> {
 
-    @Autowired
     private JobPositionRepository jobPositionRepository;
-    @Autowired
     private WorkingFormRepository workingFormRepository;
-    @Autowired
     private AcademicLevelRepository academicLevelRepository;
-    @Autowired
     private RankRepository rankRepository;
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private StatusJobRepository statusJobRepository;
+
+    public JobMapper(JobPositionRepository jobPositionRepository, WorkingFormRepository workingFormRepository, AcademicLevelRepository academicLevelRepository, RankRepository rankRepository, UserRepository userRepository, StatusJobRepository statusJobRepository) {
+        this.jobPositionRepository = jobPositionRepository;
+        this.workingFormRepository = workingFormRepository;
+        this.academicLevelRepository = academicLevelRepository;
+        this.rankRepository = rankRepository;
+        this.userRepository = userRepository;
+        this.statusJobRepository = statusJobRepository;
+    }
 
 
     @SneakyThrows
@@ -34,7 +35,6 @@ public class JobMapper implements EntityMapper<JobDTO, Job> {
         if (dto == null) {
             return null;
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm");
         Job job = new Job();
         job.setName(dto.getName());
         job.setNumberExperience(dto.getNumberExperience());
@@ -64,11 +64,10 @@ public class JobMapper implements EntityMapper<JobDTO, Job> {
     }
 
     @SneakyThrows
-    public Job toEntity(JobDTO dto,Job job) {
+    public Job toEntity(JobDTO dto, Job job) {
         if (dto == null) {
             return null;
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm");
         job.setName(dto.getName());
         job.setNumberExperience(dto.getNumberExperience());
         job.setAddressWork(dto.getAddressWork());

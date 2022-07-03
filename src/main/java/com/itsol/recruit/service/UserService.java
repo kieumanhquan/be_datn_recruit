@@ -1,13 +1,10 @@
 package com.itsol.recruit.service;
 
-import com.itsol.recruit.dto.JobPaginationDto;
 import com.itsol.recruit.dto.MessageDto;
 import com.itsol.recruit.dto.UserAndProfilesDto;
 import com.itsol.recruit.dto.UserPaginationDto;
 import com.itsol.recruit.entity.User;
-import com.itsol.recruit.web.vm.SearchJobVM;
 import com.itsol.recruit.web.vm.SearchUserVM;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 

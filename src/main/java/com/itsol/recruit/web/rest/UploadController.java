@@ -4,8 +4,6 @@ import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.entity.FileInfo;
 import com.itsol.recruit.service.UploadService;
 import com.itsol.recruit.utils.ResponseMessage;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,8 +19,11 @@ import java.util.stream.Collectors;
 @RequestMapping(value = Constants.Api.Path.PUBLIC)
 public class UploadController {
 
-    @Autowired
-    private UploadService uploadCVService;
+    private final UploadService uploadCVService;
+
+    public UploadController(UploadService uploadCVService) {
+        this.uploadCVService = uploadCVService;
+    }
 
     @PostMapping("/upload")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file

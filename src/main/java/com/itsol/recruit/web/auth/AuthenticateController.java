@@ -3,19 +3,15 @@ package com.itsol.recruit.web.auth;
 import com.itsol.recruit.core.Constants;
 import com.itsol.recruit.dto.MessageDto;
 import com.itsol.recruit.dto.UserDTO;
-import com.itsol.recruit.entity.OTP;
-import com.itsol.recruit.entity.User;
 import com.itsol.recruit.security.jwt.JWTFilter;
 import com.itsol.recruit.security.jwt.TokenProvider;
 import com.itsol.recruit.service.AuthenticateService;
 import com.itsol.recruit.service.OtpService;
-import com.itsol.recruit.service.UserService;
 import com.itsol.recruit.web.vm.LoginVM;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -35,53 +31,52 @@ public class AuthenticateController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    private final UserService userService;
-
     private final TokenProvider tokenProvider;
 
     private final OtpService otpService;
 
     public AuthenticateController(
-            AuthenticateService authenticateService, AuthenticationManagerBuilder authenticationManagerBuilder, UserService userService, TokenProvider tokenProvider,OtpService otpService) {
+            AuthenticateService authenticateService, AuthenticationManagerBuilder authenticationManagerBuilder, TokenProvider tokenProvider, OtpService otpService) {
         this.authenticateService = authenticateService;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
-        this.userService = userService;
         this.tokenProvider = tokenProvider;
-        this.otpService=otpService;
+        this.otpService = otpService;
     }
 
-    @PostMapping(Constants.Api.Path.Account.REGISTER)
-    public ResponseEntity<Boolean> register(@Valid @RequestBody UserDTO dto) {
-        return ResponseEntity.ok().body(authenticateService.signup(dto));
+     @PostMapping(Constants.Api.Path.Account.REGISTER)
+    public ResponseEntity<Boolean> registerUser(@Valid @RequestBody UserDTO dto) {
+        return ResponseEntity.ok().body(authenticateService.signup(dto, Constants.Role.USER));
     }
 
 
-    @PostMapping(Constants.Api.Path.Account.REGISTER+"Je")
+    @PostMapping(Constants.Api.Path.Account.REGISTER + "Je")
     public ResponseEntity<Boolean> registerJe(@Valid @RequestBody UserDTO dto) {
-        return ResponseEntity.ok().body(authenticateService.signupJe(dto));
+        return ResponseEntity.ok().body(authenticateService.signup(dto, Constants.Role.JE));
     }
- @PostMapping(Constants.Api.Path.Account.CHANGE_PASSWORD)
- public ResponseEntity<MessageDto> changePassword(@RequestBody UserDTO dto){
+
+    @PostMapping(Constants.Api.Path.Account.CHANGE_PASSWORD)
+    public ResponseEntity<MessageDto> changePassword(@RequestBody UserDTO dto) {
         return ResponseEntity.ok().body(authenticateService.changePassword(dto));
- }
+    }
+
     @GetMapping(Constants.Api.Path.Account.ACTIVE_ACCOUNT)
-    public ResponseEntity<String> activeAccount( @RequestParam("otp") String otp , @RequestParam("id") Long userId ) {
-        return ResponseEntity.ok().body(authenticateService.activeAccount(otp,userId));
+    public ResponseEntity<String> activeAccount(@RequestParam("otp") String otp, @RequestParam("id") Long userId) {
+        return ResponseEntity.ok().body(authenticateService.activeAccount(otp, userId));
     }
 
     @PostMapping(Constants.Api.Path.Account.RESET_PASSWORD_FINISH)
-    public ResponseEntity<MessageDto> resetPassword(@Valid @RequestBody UserDTO dto,@RequestParam String email) {
+    public ResponseEntity<MessageDto> resetPassword(@RequestBody UserDTO dto, @RequestParam String email) {
         dto.setEmail(email);
         System.out.println(dto.getEmail());
         return ResponseEntity.ok().body(authenticateService.changePassword(dto));
     }
 
     @PostMapping(Constants.Api.Path.Account.RESET_PASSWORD_INIT)
-    public ResponseEntity<MessageDto> resetPasswordInit(@Valid @RequestBody UserDTO dto) {
+    public ResponseEntity<MessageDto> resetPasswordInit(@RequestBody UserDTO dto) {
         return ResponseEntity.ok().body(otpService.sendOtp(dto));
     }
 
-    @PostMapping( Constants.Api.Path.Auth.LOGIN)
+    @PostMapping(Constants.Api.Path.Auth.LOGIN)
     public ResponseEntity<?> authenticateAdmin(@Valid @RequestBody LoginVM loginVM) {
 //		Tạo chuỗi authentication từ username và password (object LoginRequest
 //		- file này chỉ là 1 class bình thường, chứa 2 trường username và password)

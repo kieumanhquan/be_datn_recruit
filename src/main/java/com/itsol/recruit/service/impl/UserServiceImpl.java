@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -31,10 +32,10 @@ public class UserServiceImpl implements UserService {
 
     public final ProfilesRepository profilesRepository;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,ProfilesRepository profilesRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ProfilesRepository profilesRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.profilesRepository=profilesRepository;
+        this.profilesRepository = profilesRepository;
     }
 
     @Override
@@ -44,12 +45,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        return userRepository.findById(id).get();
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new IllegalStateException("No user exists");
+        }
+
     }
 
     @Override
     public User findUserByUserName(String userName) {
-        return userRepository.findByUserName(userName).get();
+        Optional<User> user = userRepository.findByUserName(userName);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new IllegalStateException("No user exists");
+        }
     }
 
     @Override
@@ -59,114 +71,112 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findUserByRole(String role) {
-       List<User> users = userRepository.findAll();
-       List<User> userList = new ArrayList<>();
-       for(User u: users){
-           for (Role role1: u.getRoles()){
-               if (role1.getCode().equals(role)){
-                   userList.add(u);
-                   break;
-               }
-           }
-       }
+        List<User> users = userRepository.findAll();
+        List<User> userList = new ArrayList<>();
+        for (User u : users) {
+            for (Role role1 : u.getRoles()) {
+                if (role1.getCode().equals(role)) {
+                    userList.add(u);
+                    break;
+                }
+            }
+        }
         return userList;
     }
 
     @Override
-    public User save(User user){
-        System.out.println("user input: "+ user.toString());
+    public User save(User user) {
+        System.out.println("user input: " + user.toString());
         return userRepository.save(user);
     }
 
     @Override
     public MessageDto updateUser(User user) {
-        MessageDto message=new MessageDto();
-        if(userRepository.findByUserName(user.getUserName()).isPresent()){
-            User userDb=userRepository.findByUserName(user.getUserName()).get();
+        MessageDto message = new MessageDto();
+        if (userRepository.findByUserName(user.getUserName()).isPresent()) {
+            User userDb = userRepository.findByUserName(user.getUserName()).get();
             user.setPassword(userDb.getPassword());
             user.setUserName(userDb.getUserName());
             user.setId(userDb.getId());
             userRepository.save(user);
-            message.setMessage("Sửa thông tin người dùng thành công");
+            message.setMessage("Successfully edited user information");
             message.setObj(true);
-        }else{
-            message.setMessage("Sửa thông tin người dùng thất bại");
+        } else {
+            message.setMessage("Fail edited user information");
             message.setObj(false);
         }
         return message;
     }
 
 
-    public  UserPaginationDto  find(SearchUserVM searchUserVM, int pageNumber, int pageSize) {
+    public UserPaginationDto find(SearchUserVM searchUserVM, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         UserPaginationDto userPaginationDto = new UserPaginationDto();
         userPaginationDto.setList(userRepository.findBySearchUserVm("%" + searchUserVM.getUserName().toLowerCase() + "%",
-                "%"+searchUserVM.getPhoneNumber()+"%","%"+ searchUserVM.getEmail() +"%",
+                "%" + searchUserVM.getPhoneNumber() + "%", "%" + searchUserVM.getEmail() + "%",
                 pageable).stream().collect(Collectors.toList()));
         userPaginationDto.setTotalPage((long) userRepository.findBySearchUserVm("%" + searchUserVM.getUserName().toLowerCase() + "%",
-                "%"+searchUserVM.getPhoneNumber()+"%","%"+ searchUserVM.getEmail() +"%",
+                "%" + searchUserVM.getPhoneNumber() + "%", "%" + searchUserVM.getEmail() + "%",
                 pageable).getTotalPages());
         return userPaginationDto;
     }
 
     @Override
     public UserAndProfilesDto findUserProfilesByUserName(String userName) {
-        UserAndProfilesDto userAndProfilesDto=new UserAndProfilesDto();
-       User user= userRepository.findByUserName(userName).get();
-        userAndProfilesDto.setUser(user);
-       if(profilesRepository.findOneByUser(user)==null){
-           Profiles profile= new Profiles();
-           profile.setUser(user);
-           userAndProfilesDto.setProfiles(profile);
-       }else{
-           userAndProfilesDto.setProfiles(profilesRepository.findOneByUser(user));
-       }
+        UserAndProfilesDto userAndProfilesDto = new UserAndProfilesDto();
+        Optional<User> user = userRepository.findByUserName(userName);
+        if (!user.isPresent()) {
+            throw new IllegalStateException("No user exists");
+        }
+
+        userAndProfilesDto.setUser(user.get());
+        if (profilesRepository.findOneByUser(user.get()) == null) {
+            Profiles profile = new Profiles();
+            profile.setUser(user.get());
+            userAndProfilesDto.setProfiles(profile);
+        } else {
+            userAndProfilesDto.setProfiles(profilesRepository.findOneByUser(user.get()));
+        }
         return userAndProfilesDto;
     }
 
     @Override
     public MessageDto updateUserProfiles(UserAndProfilesDto userAndProfilesDto) {
-        MessageDto message=new MessageDto();
-        try{
-
+        MessageDto message = new MessageDto();
+        try {
             userRepository.save(userAndProfilesDto.getUser());
             profilesRepository.save(userAndProfilesDto.getProfiles());
             message.setObj(true);
-            message.setMessage("Cập nhật thành công");
-        }catch(Exception e){
+            message.setMessage("Update successful");
+        } catch (Exception e) {
             message.setObj(false);
-            message.setMessage("Cập nhật thất bại");
+            message.setMessage("Update failed");
         }
         return message;
     }
 
     @Override
     public boolean activeFirstTime(String userName, String password) {
-        User user =new User();
-        if(userRepository.findByUserName(userName).isPresent()){
-            user=userRepository.findByUserName(userName).get();
+        User user;
+        if (userRepository.findByUserName(userName).isPresent()) {
+            user = userRepository.findByUserName(userName).get();
             user.setFirstTimeLogin(true);
             userRepository.save(user);
             return true;
-        }else{
-        return false;}
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean detective(Long userId) {
-        User user=new User();
-        if(userRepository.findById(userId).isPresent()){
-            user=userRepository.findById(userId).get();
-            if(user.isActive()
-            ){
-                user.setActive(false);
-
-            }else{
-                user.setActive(true);
-            }
+        User user;
+        if (userRepository.findById(userId).isPresent()) {
+            user = userRepository.findById(userId).get();
+            user.setActive(!user.isActive());
             userRepository.save(user);
             return true;
-        }else{
+        } else {
             return false;
         }
 

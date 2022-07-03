@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
-    private Logger log = LoggerFactory.getLogger(WebConfig.class);
+    private final Logger log = LoggerFactory.getLogger(WebConfig.class);
 
     @Bean
     public CorsFilter corsFilter() {

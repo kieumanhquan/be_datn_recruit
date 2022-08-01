@@ -4,6 +4,7 @@ import com.itsol.recruit.core.CustomValidate.DueDateConstraint;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
@@ -15,36 +16,36 @@ public class JobDTO {
 
     Long id;
 
-    @NonNull
+    @NotNull
     @Size(max = 150, message = "Over 150 characters")
     String name;
 
-    @NonNull
+    @NotNull
     Long jobPositionId;
 
-    @NonNull
+    @NotNull
     Integer numberExperience;
 
-    @NonNull
+    @NotNull
     Long workingFormId;
 
-    @NonNull
+    @NotNull
     @Size(max = 300, message = "Over 300 characters")
     String addressWork;
 
-    @NonNull
+    @NotNull
     Long academicLevelId;
 
-    @NonNull
+    @NotNull
     Long rankId;
 
-    @NonNull
+    @NotNull
     Integer qtyPerson;
 
-    @NonNull
+    @NotNull
     Date startRecruitmentDate;
 
-    @NonNull
+    @NotNull
     @DueDateConstraint
     Date dueDate;
 
@@ -59,29 +60,29 @@ public class JobDTO {
     @Size(max = 2000, message = "Over 2000 characters")
     String jobRequirement;
 
-    @NonNull
+    @NotNull
     Integer salaryMax;
 
-    @NonNull
+    @NotNull
     Integer salaryMin;
 
-    @NonNull
+    @NotNull
     Long contactId;
 
-    @NonNull
+    @NotNull
     Long creatorId;
 
     Date createDate;
 
-    @NonNull
+    @NotNull
     Long updateUserId;
 
-    @NonNull
+    @NotNull
     Date updateDate;
 
-    @NonNull
+    @NotNull
     Long statusJobId;
 
-    @NonNull
+    @NotNull
     Integer views;
 }

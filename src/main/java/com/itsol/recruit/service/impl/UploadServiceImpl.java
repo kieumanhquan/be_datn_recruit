@@ -71,7 +71,6 @@ public class UploadServiceImpl implements UploadService {
             }
             String fileName = file.getOriginalFilename();
             Files.copy(file.getInputStream(), this.root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
-            file.transferTo(new File("D:\\upFile\\"+fileName));
             // Save to job register
             registerJobForUser(user, fileName, jobId);
 
@@ -91,7 +90,6 @@ public class UploadServiceImpl implements UploadService {
             }
             String fileName = file.getOriginalFilename();
             Files.copy(file.getInputStream(), this.root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
-            file.transferTo(new File("D:\\upFile\\"+fileName));
             // Save to avatar
             user.setAvatarName(fileName);
             userRepository.save(user);

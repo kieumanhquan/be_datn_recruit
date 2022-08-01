@@ -112,7 +112,5 @@ public final class Constants {
         public static final String INVALID_MAX_VALUE = "validation.invalidMaxValue";
         public static final String INVALID_SIZE_VALUE = "validation.invalidSizeValue";
         public static final String NOT_CONTAIN_WHITE_SPACE = "validation.notContainWhiteSpace";
-
     }
-
 }

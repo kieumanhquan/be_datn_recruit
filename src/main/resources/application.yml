@@ -8,13 +8,9 @@ server:
 spring:
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
-#    url: jdbc:oracle:thin:@localhost:1521:ORCL
-#    username: TUANKIET
-#    password: phamtuankiet
     url: jdbc:oracle:thin:@localhost:1521:xe
-    username: team2
-    password: wibu123456
-
+    username: quankm
+    password: admin
 
   jpa:
     show-sql: true
